@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Tab, Tabs, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
+import { Link, BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Bisection from "../components/root/Bisection";
 import False from "../components/root/False";
 import Onepoint from "../components/root/Onepoint";
@@ -44,6 +44,9 @@ function Root() {
           </CardContent>
         </Card>
         <Switch>
+          <Route exact path="/">
+            <Redirect to="/bisection"/>
+          </Route>
           <Route path="/bisection">
             <Bisection />
           </Route>

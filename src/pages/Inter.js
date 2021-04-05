@@ -1,7 +1,7 @@
 import React from "react";
 import {Card, CardContent, Tab, Tabs, Typography} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
+import { Link, BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import NewtonDivied from "../components/inter/NewtonDivided"
 import Lagrange from "../components/inter/Lagrange"
 import Spline from "../components/inter/Spline"
@@ -29,6 +29,7 @@ function Inter() {
         </CardContent>
       </Card>
       <Switch>
+            <Route exact path="/"><Redirect to="/newton_divied"/></Route>
             <Route path="/newton_divied"> <NewtonDivied/> </Route>
             <Route path="/lagrange"> <Lagrange /> </Route>
             <Route path="/spline"> <Spline /> </Route>

@@ -21,7 +21,8 @@ function App() {
         danger: "#aa2e25",
       },
       text:{
-        primary: "#ffff"
+        primary: "#ffff",
+        secondary: "#801313"
       }
     },
   });

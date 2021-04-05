@@ -1,6 +1,133 @@
-import React from "react";
-
+import {React, useState} from 'react'
+import Graph from '../Graph'
+import { convert } from '../convert'
+import Table from '../Table'
+import { addStyles, EditableMathField } from "react-mathquill";
+import {
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { number } from "mathjs"
+const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+    },
+    centerText: {
+      textAlign: "center",
+    },
+    input: {
+      color: "black",
+    },
+  });
+addStyles();
 function Onepoint() {
-  return <div>Onepoint</div>;
+  const [latex, setLatex] = useState("");
+  const [x, setX] = useState(0);
+  const [datainput, setDatainput] = useState([]);
+  const columns = [
+    {
+      field: "id",
+      headerName: "Iteration",
+      description: "จำนวนรอบการวน",
+      type: number,
+      width: 100,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "x",
+      headerName: "X",
+      description: "ค่า X ที่ได้จากการคำนวน",
+      type: number,
+      width: 150,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "error",
+      headerName: "Error",
+      description: "ค่า Error",
+      type: number,
+      sortable: false,
+      width: 150,
+      headerAlign: "center",
+    },
+  ];
+  const OnepointIteration = (xn) => {
+    let error = 1,
+      old = 0,
+      i = 0,
+      m = parseFloat(xn);
+    let data = [];
+    while (error > 0.000001) {
+      let fnm = convert(latex, m);
+      m=fnm
+      let sum = (m - old) / m;
+      error = Math.abs(sum);
+      data[i] = {
+        id: i,
+        x: m.toFixed(6),
+        error: error.toFixed(6),
+      };
+      old = m;
+      i++;
+    }
+    return data;
+  };
+  const handleChange = (event) => {
+    event.preventDefault();
+    setDatainput(OnepointIteration(x));
+  };
+
+  const classes = useStyles();
+  return (
+    <div>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="h4" align="center">
+            OnePoint Iterations Method
+          </Typography>
+        </Grid>
+        <Grid item xs={7} align="center">
+        <Typography>ใส่ค่า X</Typography>
+          <form action="" onSubmit={handleChange}>
+            <Grid item xs={3}>
+              {/* Input x */}
+              <TextField
+                InputProps={{ className: classes.input }}
+                variant="outlined"
+                onInput={(e) => setX(e.target.value)}
+                label="X"
+                style={{ backgroundColor: "whitesmoke" }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Grid>
+          </form>
+          {/* Table */}
+          <Table rows={datainput} columns={columns}/>
+          <Typography>**ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**</Typography>
+        </Grid>
+        <Grid item xs={5} align="center">
+          <Typography>Math Function for x</Typography>
+          {/* Input Latex Field*/}
+          <EditableMathField
+            style={{ width: 200,backgroundColor: "whitesmoke" }}
+            latex={latex}
+            onChange={(mathField) => {
+              setLatex(mathField.latex());
+            }}
+          />
+          <Graph latex={latex} />
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
 export default Onepoint;

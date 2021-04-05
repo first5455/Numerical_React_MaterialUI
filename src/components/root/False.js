@@ -1,10 +1,175 @@
-import React from 'react'
-
+import {React, useState} from 'react'
+import Graph from '../Graph'
+import { convert } from '../convert'
+import Table from '../Table'
+import { addStyles, EditableMathField } from "react-mathquill";
+import {
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import {number} from 'mathjs'
+const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+    },
+    centerText: {
+      textAlign: "center",
+    },
+    input: {
+      color: "black",
+    },
+  });
+addStyles();
 function False() {
-    return (
+  const [latex, setLatex] = useState("");
+  const [xl, setXl] = useState(0);
+  const [xr, setXr] = useState(0);
+  const [datainput, setDatainput] = useState([]);
+  const columns = [
+    {
+      field: "id",
+      headerName: "Iteration",
+      description: "จำนวนรอบการวน",
+      type: number,
+      width: 100,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "xl",
+      headerName: "XL",
+      description: "ค่า XL",
+      type: number,
+      width: 150,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "xr",
+      headerName: "XR",
+      description: "ค่า XR",
+      type: number,
+      width: 150,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "x",
+      headerName: "X",
+      description: "ค่า X ที่ได้จากการคำนวน",
+      type: number,
+      width: 150,
+      sortable: false,
+      headerAlign: "center",
+    },
+    {
+      field: "error",
+      headerName: "Error",
+      description: "ค่า Error",
+      type: number,
+      sortable: false,
+      width: 150,
+      headerAlign: "center",
+    },
+  ];
+  const falseposition = (xnl, xnr) => {
+    let error = 1,
+      old = 1000,
+      i = 0,
+      m = 0,
+      l = parseFloat(xnl),
+      r = parseFloat(xnr);
+    let data = [];
+    while (error > 0.000001) {
+      
+      let fnl = convert(latex, l);
+      let fnr = convert(latex, r);
+      let fnm = convert(latex, m);
+      m = ((l*fnr)-(r*fnl))/(fnr-fnl);
+      let sum = (m - old) / m;
+      error = Math.abs(sum);
+      data[i] = {
+        id: i,
+        xl: l.toFixed(6),
+        xr: r.toFixed(6),
+        x: m.toFixed(6),
+        error: error.toFixed(6),
+      };
+      if (fnr * fnm >= 0) {
+        r = m;
+      } else {
+        l = m;
+      }
+      old = m;
+      i++;
+    }
+
+    return data;
+  };
+  const handleChange = (event) => {
+    event.preventDefault();
+    setDatainput(falseposition(xl, xr));
+  };
+
+  const classes = useStyles();
+  return (
     <div>
-        False
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="h4" align="center">
+            FalsePosition Method
+          </Typography>
+        </Grid>
+        <Grid item xs={7} align="center">
+        <Typography>ใส่ค่า XL และ XR</Typography>
+          <form action="" onSubmit={handleChange}>
+            <Grid item xs={3}>
+              {/* Input xl */}
+              <TextField
+                InputProps={{ className: classes.input }}
+                variant="outlined"
+                onInput={(e) => setXl(e.target.value)}
+                label="XL"
+                style={{ backgroundColor: "whitesmoke" }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              {/* Input xr */}
+              <TextField
+                InputProps={{ className: classes.input }}
+                variant="outlined"
+                onInput={(e) => setXr(e.target.value)}
+                label="XR"
+                style={{ backgroundColor: "whitesmoke" }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Grid>
+          </form>
+          {/* Table */}
+          <Table rows={datainput} columns={columns}/>
+          <Typography>**ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**</Typography>
+        </Grid>
+        <Grid item xs={5} align="center">
+          <Typography>Math Function</Typography>
+          {/* Input Latex Field*/}
+          <EditableMathField
+            style={{ width: 200,backgroundColor: "whitesmoke" }}
+            latex={latex}
+            onChange={(mathField) => {
+              setLatex(mathField.latex());
+            }}
+          />
+          <Graph latex={latex} />
+        </Grid>
+      </Grid>
     </div>
-    );
+  );
 }
 export default False;

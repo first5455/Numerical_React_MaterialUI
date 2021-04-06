@@ -7,9 +7,7 @@ const convert = (fn, inputx) => {
   const algebraObj = new AlgebraLatex().parseLatex(latexrepacle);
   let text = algebraObj.toMath();
   /* format exp string for mathjs */
-  const textreplace = text.replace('exp*x','exp(x)')
-  console.log(textreplace);
-  console.log(inputx);
+  const textreplace = text.replace('exp*x','exp(x)');
   let scope = { x: inputx };
   let ans = math.evaluate(textreplace, scope);
   return ans;

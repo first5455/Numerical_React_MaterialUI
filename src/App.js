@@ -6,6 +6,7 @@ import Home from "./pages/Home"
 import Root from "./pages/Root"
 import Solution from "./pages/Solution"
 import Inter from "./pages/Inter"
+import Regress from "./pages/Regression"
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 function App() {
@@ -46,6 +47,9 @@ function App() {
             </Route>
             <Route path="/inter">
               <Inter />
+            </Route>
+            <Route path="/regress">
+              <Regress />
             </Route>
           </Switch>
         </BrowserRouter>

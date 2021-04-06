@@ -10,6 +10,7 @@ function Navbar() {
           <Tab label="Root of Equations" component={Link} to="/root" />
           <Tab label="Solution techniques" component={Link} to="/sol" />
           <Tab label="Interpolation" component={Link} to="/inter" />
+          <Tab label="Regression" component={Link} to="/regress" />
         </Tabs>
       </AppBar>
     </div>

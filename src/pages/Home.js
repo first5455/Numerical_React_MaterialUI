@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { BrowserRouter } from "react-router-dom";
 const useStyles = makeStyles({
@@ -16,13 +16,20 @@ function Home() {
   return (
     <div>
       <BrowserRouter>
-        <Card className={classes.root} style={{ backgroundColor: "#ff9100" }}>
-          <CardContent>
-            <Typography variant="h4" align="center" color="textPrimary">
-              Welcome to Numerical Website
-            </Typography>
-          </CardContent>
-        </Card>
+        <Grid container>
+          <Grid item xs={12}>
+            <Card
+              className={classes.root}
+              style={{ backgroundColor: "#ff9100" }}
+            >
+              <CardContent>
+                <Typography variant="h4" align="center" color="textPrimary">
+                  Welcome to Numerical Website
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </BrowserRouter>
     </div>
   );

@@ -67,6 +67,9 @@ function Onepoint() {
       m=fnm
       let sum = (m - old) / m;
       error = Math.abs(sum);
+      if(m.toFixed(6)<=0.000000){
+        break;
+      }
       data[i] = {
         id: i,
         x: m.toFixed(6),

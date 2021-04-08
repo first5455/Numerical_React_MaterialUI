@@ -4,7 +4,7 @@ import "./components/Navbar";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home"
 import Root from "./pages/Root"
-import Solution from "./pages/Solution"
+import Solution from "./pages/LinearAlgebra"
 import Inter from "./pages/Inter"
 import Regress from "./pages/Regression"
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
@@ -42,7 +42,7 @@ function App() {
             <Route path="/root">
               <Root />
             </Route>
-            <Route path="/sol">
+            <Route path="/linearalgebra">
               <Solution />
             </Route>
             <Route path="/inter">

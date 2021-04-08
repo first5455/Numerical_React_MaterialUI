@@ -2,13 +2,13 @@ import React from "react";
 import { Card, CardContent, Tab, Tabs, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link, BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import Cramer from "../components/sol/Cramer";
-import GaussElimination from "../components/sol/GaussElimination";
-import GaussJordan from "../components/sol/GaussJordan";
-import Lu from "../components/sol/Lu";
-import JacobiIter from "../components/sol/JacobiIter";
-import GaussSeidel from "../components/sol/GaussSeidel";
-import ConjugateGradient from "../components/sol/Conjugate_gradient";
+import Cramer from "../components/linearalgebra/Cramer";
+import GaussElimination from "../components/linearalgebra/GaussElimination";
+import GaussJordan from "../components/linearalgebra/GaussJordan";
+import Lu from "../components/linearalgebra/Lu";
+import JacobiIter from "../components/linearalgebra/JacobiIter";
+import GaussSeidel from "../components/linearalgebra/GaussSeidel";
+import ConjugateGradient from "../components/linearalgebra/Conjugate_gradient";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -17,11 +17,11 @@ const useStyles = makeStyles({
     textAlign: "center",
   },
 });
-function Solution() {
+function LinearAlgebra() {
   const classes = useStyles();
   return (
     <div>
-      <BrowserRouter basename="/sol">
+      <BrowserRouter basename="/linearalgebra">
         <Card style={{ backgroundColor: "#ff9100" }} className={classes.root}>
           <CardContent>
             <Typography variant="h4" align="center" color="textPrimary">
@@ -80,4 +80,4 @@ function Solution() {
     </div>
   );
 }
-export default Solution;
+export default LinearAlgebra;

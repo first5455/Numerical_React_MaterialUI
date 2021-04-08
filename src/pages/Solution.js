@@ -5,9 +5,7 @@ import { Link, BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Cramer from "../components/sol/Cramer";
 import GaussElimination from "../components/sol/GaussElimination";
 import GaussJordan from "../components/sol/GaussJordan";
-import MatrixInver from "../components/sol/MatrixInver";
 import Lu from "../components/sol/Lu";
-import Cholesky from "../components/sol/Cholesky";
 import JacobiIter from "../components/sol/JacobiIter";
 import GaussSeidel from "../components/sol/GaussSeidel";
 import ConjugateGradient from "../components/sol/Conjugate_gradient";
@@ -37,17 +35,7 @@ function Solution() {
                 to="/gauss_elimination"
               />
               <Tab label="Gauss Jordan" component={Link} to="/gauss_jordan" />
-              <Tab
-                label="Matrix Inversion"
-                component={Link}
-                to="/matrix_inversion"
-              />
               <Tab label="LU Decomposition" component={Link} to="/lu" />
-              <Tab
-                label="Cholesky Decomposition"
-                component={Link}
-                to="/cholesky"
-              />
               <Tab
                 label="Jacobi Iteration"
                 component={Link}
@@ -75,14 +63,8 @@ function Solution() {
           <Route path="/gauss_jordan">
             <GaussJordan />
           </Route>
-          <Route path="/matrix_inversion">
-            <MatrixInver />
-          </Route>
           <Route path="/lu">
             <Lu />
-          </Route>
-          <Route path="/cholesky">
-            <Cholesky />
           </Route>
           <Route path="/jacobi_iter">
             <JacobiIter />

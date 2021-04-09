@@ -146,6 +146,11 @@ function Lu() {
   const handle = (event) => {
     setAns(Lude());
   };
+  const resetMatrix = (event) => {
+    setDimension(0);
+    setRows();
+    setInputs();
+}
   return (
     <div>
       <Grid container spacing={1}>
@@ -179,6 +184,14 @@ function Lu() {
               }}
             >
               load Matrix
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                resetMatrix(e);
+              }}
+            >
+              Reset Matrix
             </Button>
         </Grid>
         <Grid item xs={12} align="center">

@@ -47,7 +47,7 @@ function Jacobi_iter() {
     [-1, 4, -2],
     [0, -2, 4],
   ];
-  let valueb = [400,400,400];
+  let valueb = [400, 400, 400];
   let valuex = [0, 0, 0];
   let bin = [];
   let xin = [];
@@ -61,7 +61,7 @@ function Jacobi_iter() {
     let X = xin;
     console.log(B);
     let ECL = 0.000001;
-    let check = [false,false,false];
+    let check = [false, false, false];
     let r = 0;
     let ans = [];
     while (true) {
@@ -70,29 +70,35 @@ function Jacobi_iter() {
         err = Infinity;
       while (i < B.length) {
         var aii = A.subset(math.index(i, i));
-        var res = math.multiply((A.subset(math.index(i,math.range(0,B.length)))),X)
+        var res = math.multiply(
+          A.subset(math.index(i, math.range(0, B.length))),
+          X
+        );
         res = math.squeeze(res);
-        console.log(res)
-        xnew[i] = (B[i] - res + (aii * X[i])) / aii;
+        console.log(res);
+        xnew[i] = (B[i] - res + aii * X[i]) / aii;
         err = Math.abs((xnew[i] - X[i]) / xnew[i]);
         if (err <= ECL) {
           check[i] = true;
         }
         i++;
-        
       }
-      xnew.map((value, index) => {
+      xnew.forEach((value, index) => {
         X[index] = value;
-      });     
-      if (check[0] && check[1] && check[2] == true) break;
-      if(r>=100){break;}
+        
+      });
+      if (check[0] && check[1] && check[2] === true) break;
+      if (r >= 100) {
+        break;
+      }
       r++;
     }
-    for(let i =0;i<X.length;i++){
+    for (let i = 0; i < X.length; i++) {
       ans[i] = {
-          id: i,
-          ans: parseFloat(""+X[i]).toFixed(3),}
-  }
+        id: i,
+        ans: parseFloat("" + X[i]).toFixed(3),
+      };
+    }
     return ans;
   };
   const createMatrix = (event) => {
@@ -226,7 +232,11 @@ function Jacobi_iter() {
   const handle = (event) => {
     setAns(jacobiIter());
   };
-
+  const resetMatrix = (event) => {
+    setDimension(0);
+    setRows();
+    setInputs();
+}
   return (
     <div>
       <Grid container spacing={1}>
@@ -252,6 +262,14 @@ function Jacobi_iter() {
               }}
             >
               Set Matrix
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                resetMatrix(e);
+              }}
+            >
+              Reset Matrix
             </Button>
             <Grid>{rows}</Grid>
             <Button

@@ -163,6 +163,11 @@ function GaussElimination() {
   const handle = (event) => {
     setAns(gaussElimination());
   };
+  const resetMatrix = (event) => {
+    setDimension(0);
+    setRows();
+    setInputs();
+}
   return (
     <div>
       <Grid container spacing={1}>
@@ -188,6 +193,14 @@ function GaussElimination() {
               }}
             >
               Set Matrix
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                resetMatrix(e);
+              }}
+            >
+              Reset Matrix
             </Button>
             <Grid>{rows}</Grid>
             <Button

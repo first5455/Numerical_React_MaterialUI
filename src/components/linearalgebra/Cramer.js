@@ -154,6 +154,11 @@ function Cramer() {
   const handle = (event) => {
     setAns(cramer_cal());
   };
+  const resetMatrix = (event) => {
+    setDimension(0);
+    setRows();
+    setInputs();
+}
   return (
     <div>
       <Grid container spacing={1}>
@@ -179,6 +184,14 @@ function Cramer() {
               }}
             >
               Set Matrix
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                resetMatrix(e);
+              }}
+            >
+              Reset Matrix
             </Button>
             <Grid>{rows}</Grid>
             <Button

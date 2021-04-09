@@ -150,6 +150,11 @@ function Gauss_jordan() {
   const handle = (event) => {
     setAns(gaussJordans());
   };
+  const resetMatrix = (event) => {
+    setDimension(0);
+    setRows();
+    setInputs();
+}
   return (
     <div>
       <Grid container spacing={1}>
@@ -175,6 +180,14 @@ function Gauss_jordan() {
               }}
             >
               Set Matrix
+            </Button>
+            <Button
+              variant="contained"
+              onClick={(e) => {
+                resetMatrix(e);
+              }}
+            >
+              Reset Matrix
             </Button>
             <Grid>{rows}</Grid>
             <Button

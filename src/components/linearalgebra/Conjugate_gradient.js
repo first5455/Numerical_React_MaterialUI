@@ -57,7 +57,6 @@ function Conjugate_gradient() {
     let X = math.zeros(B.length);
     let ECL = 0.001;
     let err = Infinity;
-    let r = 0;
     let ramda = Infinity;
     let alpha = Infinity;
     let ans = [];
@@ -71,7 +70,6 @@ function Conjugate_gradient() {
       );
     });
     var D = R.map((value) => value * -1); //D = -R
-
     //calculate
     while (true) {
       ramda =
@@ -92,8 +90,6 @@ function Conjugate_gradient() {
         );
       });
       err = math.sqrt(math.multiply(R, math.transpose(R))); //error
-      // console.log(" R : "+ R + "  D : "+D +" ramda : "+ ramda)
-      //console.log("x : " + x + " error : " + err);
       if (err <= ECL) {
         break;
       }
@@ -104,8 +100,6 @@ function Conjugate_gradient() {
       D = R.map(
         (value, index) => -1 * value + alpha * math.subset(D, math.index(index))
       ); //Dk+1
-      // console.log("Alpha : "+ alpha + " Dnew : " + D)
-      r++;
     }
     for (let i = 0; i < X._data.length; i++) {
       ans[i] = {
@@ -215,7 +209,7 @@ function Conjugate_gradient() {
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <Typography variant="h4" align="center">
-            COnjugate Gradient
+            Conjugate Gradient
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">

@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { toarray } from "../toarray";
 import Table from "../Table";
 const math = require("mathjs");
 const useStyles = makeStyles({
@@ -64,6 +63,7 @@ function Gauss_seidel() {
     let check = [false, false, false];
     let r = 0;
     let ans = [];
+    let stop = false;
     while (true) {
       var i = 0,
         err = Infinity;
@@ -83,8 +83,13 @@ function Gauss_seidel() {
         X[i] = xnew;
         i++;
       }
-      console.log("round : " + r + " => " + X);
-      if (check[0] && check[1] && check[2] === true) break;
+      for(let i =0 ; i<check.length;i++){
+        stop = (stop&&check[i])
+      }
+      if (stop === true) break;
+      if (r >= 100) {
+        break;
+      }
       r++;
     }
     for (let i = 0; i < X.length; i++) {
@@ -196,7 +201,6 @@ function Gauss_seidel() {
           <TextField
             id={"B" + i}
             variant="outlined"
-            defaultValue={dimension}
             label={"B" + i}
             InputProps={{ className: classes.input }}
           />

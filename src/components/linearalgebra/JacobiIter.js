@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { toarray } from "../toarray";
 import Table from "../Table";
 const math = require("mathjs");
 const useStyles = makeStyles({
@@ -64,6 +63,7 @@ function Jacobi_iter() {
     let check = [false, false, false];
     let r = 0;
     let ans = [];
+    let stop = false;
     while (true) {
       var i = 0,
         xnew = [0, 0, 0],
@@ -87,7 +87,10 @@ function Jacobi_iter() {
         X[index] = value;
         
       });
-      if (check[0] && check[1] && check[2] === true) break;
+      for(let i =0 ; i<check.length;i++){
+        stop = (stop&&check[i])
+      }
+      if (stop === true) break;
       if (r >= 100) {
         break;
       }
@@ -202,7 +205,6 @@ function Jacobi_iter() {
           <TextField
             id={"B" + i}
             variant="outlined"
-            defaultValue={dimension}
             label={"B" + i}
             InputProps={{ className: classes.input }}
           />
@@ -236,6 +238,7 @@ function Jacobi_iter() {
     setDimension(0);
     setRows();
     setInputs();
+    setInputsx()
 }
   return (
     <div>

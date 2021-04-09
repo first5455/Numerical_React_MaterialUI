@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <div>
-      <AppBar color="primary" position="absolute">
+      <AppBar color="primary" style={{ height: "60px" }}>
         <Tabs variant="fullWidth">
           <Tab label="Home" component={Link} to="/" />
           <Tab label="Root of Equations" component={Link} to="/root" />
-          <Tab label="Solution techniques" component={Link} to="/linearalgebra" />
+          <Tab
+            label="Linear Algebra"
+            component={Link}
+            to="/linearalgebra"
+          />
           <Tab label="Interpolation" component={Link} to="/inter" />
           <Tab label="Regression" component={Link} to="/regress" />
         </Tabs>

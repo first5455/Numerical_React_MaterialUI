@@ -34,18 +34,18 @@ const columns = [
 ];
 function Cramer() {
   const classes = useStyles();
-  const [dimension, setDimension] = useState();
+  const [dimension, setDimension] = useState(0);
   const [rows, setRows] = useState();
-  let datainput;
+  let datainput,modeb = 0;
   let value = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
+    [-2, 3, 1],
+    [3, 4, -5],
+    [1, -2, 1],
   ];
+  let valueb = [9,0,-4];
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
-  let field = [];
   const cramer_cal = () => {
     getMatrix();
     let arr = datainput;
@@ -97,23 +97,46 @@ function Cramer() {
       let temp = [];
       for (let j = 0; j < data[0].length; j++) {
         temp[j] = (
-          <input id={"r:" + i + "c:" + j} value={parseFloat(data[i][j])} />
+          <input id={"r:" + i + "c:" + j} defaultValue={parseFloat(data[i][j])} />
         );
       }
+      
       temp[data.length] = <br />;
       row[i] = temp;
     }
+    let field = [];
+    datainput = value;
+    modeb = 1;
+    for (let i = 0; i < datainput[0].length; i++) {
+      field[i] = (
+        <Grid>
+          <TextField
+            id={"B" + i}
+            defaultValue={valueb[i]}
+            variant="outlined"
+            label={"B" + i}
+            InputProps={{ className: classes.input }}
+          />
+        </Grid>
+      );
+    }
+    setInputs(field);
     setDimension(data.length);
     setRows(row);
   };
   const pushb = () => {
+    if (modeb === 1) {
+      datainput = value;
+    }
     for (let i = 0; i < datainput[0].length; i++) {
       bin.push(parseFloat(document.getElementById("B" + i).value));
     }
+    modeb = 0;
   };
   const controlInput = (event) => {
     event.preventDefault();
     getMatrix();
+    let field = []
     for (let i = 0; i < datainput[0].length; i++) {
       field[i] = (
         <Grid>
@@ -144,6 +167,7 @@ function Cramer() {
             <TextField
               InputProps={{ className: classes.input }}
               variant="outlined"
+              defaultValue={dimension}
               onInput={(e) => setDimension(e.target.value)}
               label="Dimension"
               style={{ backgroundColor: "whitesmoke" }}

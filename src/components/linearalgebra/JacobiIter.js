@@ -3,6 +3,7 @@ import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { toarray } from "../toarray";
 import Table from "../Table";
+const math = require("mathjs");
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -34,22 +35,65 @@ const columns = [
 ];
 function Jacobi_iter() {
   const classes = useStyles();
-  const [dimension, setDimension] = useState();
+  const [dimension, setDimension] = useState(0);
   const [rows, setRows] = useState();
-  let datainput;
+  let datainput,
+    modeb = 0;
   const [inputs, setInputs] = useState();
+  const [inputsx, setInputsx] = useState();
   const [ans, setAns] = useState([]);
   let value = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
+    [4, -4, 0],
+    [-1, 4, -2],
+    [0, -2, 4],
   ];
+  let valueb = [400,400,400];
+  let valuex = [0, 0, 0];
   let bin = [];
-  let field = [];
+  let xin = [];
   const jacobiIter = () => {
-    let A = datainput;
+    getMatrix();
     pushb();
+    pushx();
+    let arr = datainput;
+    let A = math.matrix(arr);
     let B = bin;
+    let X = xin;
+    console.log(B);
+    let ECL = 0.000001;
+    let check = [false,false,false];
+    let r = 0;
+    let ans = [];
+    while (true) {
+      var i = 0,
+        xnew = [0, 0, 0],
+        err = Infinity;
+      while (i < B.length) {
+        var aii = A.subset(math.index(i, i));
+        var res = math.multiply((A.subset(math.index(i,math.range(0,B.length)))),X)
+        res = math.squeeze(res);
+        console.log(res)
+        xnew[i] = (B[i] - res + (aii * X[i])) / aii;
+        err = Math.abs((xnew[i] - X[i]) / xnew[i]);
+        if (err <= ECL) {
+          check[i] = true;
+        }
+        i++;
+        
+      }
+      xnew.map((value, index) => {
+        X[index] = value;
+      });     
+      if (check[0] && check[1] && check[2] == true) break;
+      if(r>=100){break;}
+      r++;
+    }
+    for(let i =0;i<X.length;i++){
+      ans[i] = {
+          id: i,
+          ans: parseFloat(""+X[i]).toFixed(3),}
+  }
+    return ans;
   };
   const createMatrix = (event) => {
     let row = [];
@@ -64,6 +108,7 @@ function Jacobi_iter() {
     setRows(row);
   };
   const getMatrix = () => {
+    modeb = 0;
     let d = [];
     for (let i = 0; i < dimension; i++) {
       let temp = [];
@@ -76,34 +121,82 @@ function Jacobi_iter() {
   };
 
   const changeMatrix = (event, data) => {
+    modeb = 1;
     let row = [];
     for (let i = 0; i < data.length; i++) {
       let temp = [];
       for (let j = 0; j < data[0].length; j++) {
         temp[j] = (
-          <input id={"r:" + i + "c:" + j} value={parseFloat(data[i][j])} />
+          <input
+            id={"r:" + i + "c:" + j}
+            defaultValue={parseFloat(data[i][j])}
+          />
         );
       }
       temp[data.length] = <br />;
       row[i] = temp;
     }
+    let field = [];
+    datainput = value;
+    for (let i = 0; i < datainput[0].length; i++) {
+      field[i] = (
+        <Grid>
+          <TextField
+            id={"B" + i}
+            defaultValue={valueb[i]}
+            variant="outlined"
+            label={"B" + i}
+            InputProps={{ className: classes.input }}
+          />
+        </Grid>
+      );
+    }
+    let fieldx = [];
+    for (let i = 0; i < datainput[0].length; i++) {
+      fieldx[i] = (
+        <Grid>
+          <TextField
+            id={"X" + i}
+            defaultValue={valuex[i]}
+            variant="outlined"
+            label={"X" + i}
+            InputProps={{ className: classes.input }}
+          />
+        </Grid>
+      );
+    }
+    setInputs(field);
+    setInputsx(fieldx);
     setDimension(data.length);
     setRows(row);
   };
   const pushb = () => {
+    if (modeb === 1) {
+      datainput = value;
+    }
     for (let i = 0; i < datainput[0].length; i++) {
       bin.push(parseFloat(document.getElementById("B" + i).value));
+    }
+  };
+  const pushx = () => {
+    if (modeb === 1) {
+      datainput = value;
+    }
+    for (let i = 0; i < datainput[0].length; i++) {
+      xin.push(parseFloat(document.getElementById("X" + i).value));
     }
   };
   const controlInput = (event) => {
     event.preventDefault();
     getMatrix();
+    let field = [];
     for (let i = 0; i < datainput[0].length; i++) {
       field[i] = (
         <Grid>
           <TextField
             id={"B" + i}
             variant="outlined"
+            defaultValue={dimension}
             label={"B" + i}
             InputProps={{ className: classes.input }}
           />
@@ -112,9 +205,28 @@ function Jacobi_iter() {
     }
     setInputs(field);
   };
+  const controlInput2 = (event) => {
+    event.preventDefault();
+    getMatrix();
+    let field = [];
+    for (let i = 0; i < datainput[0].length; i++) {
+      field[i] = (
+        <Grid>
+          <TextField
+            id={"X" + i}
+            variant="outlined"
+            label={"X" + i}
+            InputProps={{ className: classes.input }}
+          />
+        </Grid>
+      );
+    }
+    setInputsx(field);
+  };
   const handle = (event) => {
     setAns(jacobiIter());
   };
+
   return (
     <div>
       <Grid container spacing={1}>
@@ -128,6 +240,7 @@ function Jacobi_iter() {
             <TextField
               InputProps={{ className: classes.input }}
               variant="outlined"
+              defaultValue={dimension}
               onInput={(e) => setDimension(e.target.value)}
               label="Dimension"
               style={{ backgroundColor: "whitesmoke" }}
@@ -144,10 +257,10 @@ function Jacobi_iter() {
             <Button
               variant="contained"
               onClick={(e) => {
-                changeMatrix(e, value);
+                changeMatrix(e, value, valueb);
               }}
             >
-              load Matrix
+              Load Matrix
             </Button>
           </Grid>
         </Grid>
@@ -158,6 +271,14 @@ function Jacobi_iter() {
         </Grid>
         <Grid item xs={12} align="center">
           {inputs}
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button variant="contained" onClick={controlInput2} color="primary">
+            Set Initial X
+          </Button>
+        </Grid>
+        <Grid item xs={12} align="center">
+          {inputsx}
         </Grid>
         <Grid item xs={12} align="center">
           <Button variant="contained" onClick={handle} color="primary">

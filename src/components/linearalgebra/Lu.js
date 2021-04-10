@@ -163,7 +163,7 @@ function Lu() {
             <TextField
               InputProps={{ className: classes.input }}
               variant="outlined"
-              defaultValue={dimension}
+              value={dimension}
               onInput={(e) => setDimension(e.target.value)}
               label="Dimension"
               style={{ backgroundColor: "whitesmoke" }}

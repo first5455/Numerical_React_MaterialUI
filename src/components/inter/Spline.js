@@ -26,18 +26,24 @@ function Spline() {
   let Ydata = [9.81, 9.7487, 9.6879, 9.6879, 9.5682];
   let XfindData = 42000;
   const cubic_spline = () => {
-    pushInput();
-    let x = Xin;
-    let y = Yin;
-    let xfind = xstart;
-    let spline = new SplineSolve(x, y);
-    return spline.at(xfind).toFixed(6);
+    try {
+      pushInput();
+      let x = Xin;
+      let y = Yin;
+      let xfind = xstart;
+      let spline = new SplineSolve(x, y);
+      return spline.at(xfind).toFixed(6);
+    } catch (error) {
+      return "Error"
+    }
   };
   const pushInput = () => {
-    for (let i = 0; i < sizeInputs; i++) {
-      Xin.push(parseFloat(document.getElementById("X" + i).value));
-      Yin.push(parseFloat(document.getElementById("Y" + i).value));
-    }
+    try {
+      for (let i = 0; i < sizeInputs; i++) {
+        Xin.push(parseFloat(document.getElementById("X" + i).value));
+        Yin.push(parseFloat(document.getElementById("Y" + i).value));
+      }
+    } catch (error) {}
   };
   const controlInput2 = (event) => {
     event.preventDefault();

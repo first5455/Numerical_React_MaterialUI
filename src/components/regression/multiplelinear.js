@@ -20,8 +20,6 @@ function MultipleLinear() {
   const [inputsX, setInputX] = useState();
   const [inputsY, setInputY] = useState();
   const [ans, setAns] = useState();
-  let Xin = [];
-  let Yin = [];
   let value = [
     [1, 0, 1, 4],
     [0, 1, 3, -5],
@@ -33,16 +31,39 @@ function MultipleLinear() {
   ];
   let point = [];
   const multi_linear_regress = () => {
-    pushInput();
+    try {
+      pushInput();
+      let ans = regression(point);
+      let show = ["["];
+      for (let i = 0; i < ans.length; i++) {
+        if (i === ans.length - 1) {
+          show.push(ans[i].toFixed(3) + "]");
+        } else {
+          show.push(ans[i].toFixed(3) + ",");
+        }
+      }
+      return show;
+    } catch (error) {
+      return "Error"
+    }
   };
   const pushInput = () => {
-    let temp = [];
-    for (let i = 0; i < sizepoint; i++) {
-      Xin.push(parseFloat(document.getElementById("X" + i).value));
-      Yin.push(parseFloat(document.getElementById("Y" + i).value));
-      temp.push([Xin[i], Yin[i]]);
-    }
-    point = temp;
+    try {
+      let temp = [];
+      for (let i = 0; i < sizepoint; i++) {
+        let tempx = [];
+        for (let j = 0; j < sizex; j++) {
+          tempx.push(
+            parseFloat(document.getElementById("X" + i + "N" + j).value)
+          );
+          if (j === sizex - 1) {
+            tempx.push(parseFloat(document.getElementById("Y" + i).value));
+          }
+        }
+        temp.push(tempx);
+      }
+      point = temp;
+    } catch (error) {}
   };
   const reset = (event) => {
     setSizepoint(0);
@@ -55,23 +76,27 @@ function MultipleLinear() {
     let fieldx = [];
     let fieldy = [];
     for (let i = 0; i < value.length; i++) {
-      fieldx[i] = (
-        <Grid>
+      let fieldcolumns = [];
+      for (let j = 0; j < value[0].length - 1; j++) {
+        fieldcolumns[j] = (
           <TextField
-            id={"X" + i}
+            id={"X" + i + "N" + j}
             variant="outlined"
-            value={value[i][0]}
-            label={"X" + i}
+            value={value[i][j]}
+            label={"Point " + i + " Of X" + j}
             InputProps={{ className: classes.input }}
           />
-        </Grid>
-      );
+        );
+      }
+      fieldcolumns.push(<br />);
+      fieldcolumns.push(<br />);
+      fieldx[i] = fieldcolumns;
       fieldy[i] = (
         <Grid>
           <TextField
             id={"Y" + i}
             variant="outlined"
-            value={value[i][1]}
+            value={value[i][value[0].length - 1]}
             label={"f(x)" + i}
             InputProps={{ className: classes.input }}
           />
@@ -79,6 +104,7 @@ function MultipleLinear() {
       );
     }
     setSizepoint(value.length);
+    setSizex(value[0].length - 1);
     setInputX(fieldx);
     setInputY(fieldy);
   };
@@ -98,8 +124,9 @@ function MultipleLinear() {
           />
         );
       }
+      fieldcolumns.push(<br />);
+      fieldcolumns.push(<br />);
       fieldx[i] = fieldcolumns;
-      fieldx.push(<br />);
       fieldy[i] = (
         <Grid>
           <TextField
@@ -155,10 +182,10 @@ function MultipleLinear() {
             Example
           </Button>
         </Grid>
-        <Grid item xs={6} align="right">
+        <Grid item xs={12} align="center">
           {inputsX}
         </Grid>
-        <Grid item xs={6} align="left">
+        <Grid item xs={12} align="center">
           {inputsY}
         </Grid>
         <Grid item xs={12} align="center">
@@ -172,6 +199,9 @@ function MultipleLinear() {
         <Grid item xs={12}>
           <Typography variant="h4" align="center">
             Answer is {ans}
+          </Typography>
+          <Typography variant="h6" align="center">
+            **รูปแบบลำดับคือ [a0,a1X1,a2X2,...anXn]**
           </Typography>
         </Grid>
       </Grid>

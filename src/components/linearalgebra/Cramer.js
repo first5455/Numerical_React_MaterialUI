@@ -36,36 +36,41 @@ function Cramer() {
   const classes = useStyles();
   const [dimension, setDimension] = useState(0);
   const [rows, setRows] = useState();
-  let datainput,modeb = 0;
+  let datainput,
+    modeb = 0;
   let value = [
     [-2, 3, 1],
     [3, 4, -5],
     [1, -2, 1],
   ];
-  let valueb = [9,0,-4];
+  let valueb = [9, 0, -4];
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
   const cramer_cal = () => {
-    getMatrix();
-    let arr = datainput;
-    pushb();
-    let A = math.matrix(arr);
-    let B = math.matrix(bin);
-    let X = [];
-    for (let i = 0; i < math.size(A)._data[0]; i++) {
-      let changeA = math.clone(A);
-      for (let j = 0; j < math.size(B)._data[0]; j++) {
-        let temp = B.subset(math.index(j));
-        changeA.subset(math.index(j, i), temp);
+    try {
+      getMatrix();
+      let arr = datainput;
+      pushb();
+      let A = math.matrix(arr);
+      let B = math.matrix(bin);
+      let X = [];
+      for (let i = 0; i < math.size(A)._data[0]; i++) {
+        let changeA = math.clone(A);
+        for (let j = 0; j < math.size(B)._data[0]; j++) {
+          let temp = B.subset(math.index(j));
+          changeA.subset(math.index(j, i), temp);
+        }
+        let solve = Math.round(math.det(changeA)) / Math.round(math.det(A));
+        X[i] = {
+          id: i + 1,
+          ans: solve.toFixed(3),
+        };
       }
-      let solve = Math.round(math.det(changeA)) / Math.round(math.det(A));
-      X[i] = {
-        id: i + 1,
-        ans: solve.toFixed(3),
-      };
+      return X;
+    } catch (error) {
+      return "Error"
     }
-    return X;
   };
   const createMatrix = (event) => {
     let row = [];
@@ -80,15 +85,17 @@ function Cramer() {
     setRows(row);
   };
   const getMatrix = () => {
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -97,10 +104,13 @@ function Cramer() {
       let temp = [];
       for (let j = 0; j < data[0].length; j++) {
         temp[j] = (
-          <input id={"r:" + i + "c:" + j} defaultValue={parseFloat(data[i][j])} />
+          <input
+            id={"r:" + i + "c:" + j}
+            defaultValue={parseFloat(data[i][j])}
+          />
         );
       }
-      
+
       temp[data.length] = <br />;
       row[i] = temp;
     }
@@ -125,40 +135,46 @@ function Cramer() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
-    modeb = 0;
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+      modeb = 0;
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = []
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(cramer_cal());
+    try {
+      setAns(cramer_cal());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
     setDimension(0);
     setRows();
     setInputs();
-}
+  };
   return (
     <div>
       <Grid container spacing={1}>

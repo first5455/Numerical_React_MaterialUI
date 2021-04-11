@@ -26,27 +26,33 @@ function Lagrange() {
   let Ydata = [9.81, 9.7487, 9.6879, 9.6879, 9.5682];
   let XfindData = 42000;
   const lagrange = () => {
-    pushInput();
-    let x = Xin;
-    let y = Yin;
-    let xfind = xstart;
-    let out = 0;
-    for (let i = 0; i < x.length; i++) {
-      let p = 1;
-      for (let j = 0; j < x.length; j++) {
-        if (i !== j) {
-          p = p * ((xfind - x[j]) / (x[i] - x[j]));
+    try {
+      pushInput();
+      let x = Xin;
+      let y = Yin;
+      let xfind = xstart;
+      let out = 0;
+      for (let i = 0; i < x.length; i++) {
+        let p = 1;
+        for (let j = 0; j < x.length; j++) {
+          if (i !== j) {
+            p = p * ((xfind - x[j]) / (x[i] - x[j]));
+          }
         }
+        out += p * y[i];
       }
-      out += p * y[i];
+      return out.toFixed(8);
+    } catch (error) {
+      return "Error"
     }
-    return out.toFixed(8);
   };
   const pushInput = () => {
-    for (let i = 0; i < sizeInputs; i++) {
-      Xin.push(parseFloat(document.getElementById("X" + i).value));
-      Yin.push(parseFloat(document.getElementById("Y" + i).value));
-    }
+    try {
+      for (let i = 0; i < sizeInputs; i++) {
+        Xin.push(parseFloat(document.getElementById("X" + i).value));
+        Yin.push(parseFloat(document.getElementById("Y" + i).value));
+      }
+    } catch (error) {}
   };
   const controlInput2 = (event) => {
     event.preventDefault();

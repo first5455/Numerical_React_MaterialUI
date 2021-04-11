@@ -3,14 +3,9 @@ import Graph from "../Graph";
 import { convert } from "../convert";
 import Table from "../Table";
 import { addStyles, EditableMathField } from "react-mathquill";
-import {
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {number} from 'mathjs'
+import { number } from "mathjs";
 addStyles();
 const useStyles = makeStyles({
   root: {
@@ -76,44 +71,50 @@ function Bisection() {
     },
   ];
   const bisection = (xnl, xnr) => {
-    let error = 1,
-      old = 1000,
-      i = 0,
-      m = 0,
-      l = parseFloat(xnl),
-      r = parseFloat(xnr);
-    let data = [];
-    while (error > 0.000001) {
-      m = (l + r) / 2;
-      //let fnl = convert(latex, l);
-      let fnr = convert(latex, r);
-      let fnm = convert(latex, m);
-      let sum = (m - old) / m;
-      error = Math.abs(sum);
-      if(m.toFixed(6)<=0.000000){
-        break;
+    try {
+      let error = 1,
+        old = 1000,
+        i = 0,
+        m = 0,
+        l = parseFloat(xnl),
+        r = parseFloat(xnr);
+      let data = [];
+      while (error > 0.000001) {
+        m = (l + r) / 2;
+        //let fnl = convert(latex, l);
+        let fnr = convert(latex, r);
+        let fnm = convert(latex, m);
+        let sum = (m - old) / m;
+        error = Math.abs(sum);
+        if (m.toFixed(6) <= 0.0) {
+          break;
+        }
+        data[i] = {
+          id: i,
+          xl: l.toFixed(6),
+          xr: r.toFixed(6),
+          x: m.toFixed(6),
+          error: error.toFixed(6),
+        };
+        if (fnr * fnm >= 0) {
+          r = m;
+        } else {
+          l = m;
+        }
+        old = m;
+        i++;
       }
-      data[i] = {
-        id: i,
-        xl: l.toFixed(6),
-        xr: r.toFixed(6),
-        x: m.toFixed(6),
-        error: error.toFixed(6),
-      };
-      if (fnr * fnm >= 0) {
-        r = m;
-      } else {
-        l = m;
-      }
-      old = m;
-      i++;
-    }
 
-    return data;
+      return data;
+    } catch (error) {
+      return "Error"
+    }
   };
   const handleChange = (event) => {
-    event.preventDefault();
-    setDatainput(bisection(xl, xr));
+    try {
+      event.preventDefault();
+      setDatainput(bisection(xl, xr));
+    } catch (error) {}
   };
 
   const classes = useStyles();
@@ -126,7 +127,7 @@ function Bisection() {
           </Typography>
         </Grid>
         <Grid item xs={7} align="center">
-        <Typography>ใส่ค่า XL และ XR</Typography>
+          <Typography>ใส่ค่า XL และ XR</Typography>
           <form action="" onSubmit={handleChange}>
             <Grid item xs={3}>
               {/* Input xl */}
@@ -156,13 +157,15 @@ function Bisection() {
           </form>
           {/* Table */}
           <Table rows={datainput} columns={columns} />
-          <Typography>**ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**</Typography>
+          <Typography>
+            **ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**
+          </Typography>
         </Grid>
         <Grid item xs={5} align="center">
           <Typography>Math Function</Typography>
           {/* Input Latex Field*/}
           <EditableMathField
-            style={{ width: 200,backgroundColor: "whitesmoke" }}
+            style={{ width: 200, backgroundColor: "whitesmoke" }}
             latex={latex}
             onChange={(mathField) => {
               setLatex(mathField.latex());

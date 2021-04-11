@@ -49,37 +49,21 @@ function Conjugate_gradient() {
   const [ans, setAns] = useState([]);
   let bin = [];
   const conjugate_gradient = () => {
-    getMatrix();
-    let arr = datainput;
-    pushb();
-    let A = math.matrix(arr);
-    let B = bin;
-    let X = math.zeros(B.length);
-    let ECL = 0.001;
-    let err = Infinity;
-    let ramda = Infinity;
-    let alpha = Infinity;
-    let ans = [];
-    //pre iteration
-    var R = B.map((value, index) => {
-      //find R0
-      return (
-        math.squeeze(
-          math.multiply(A.subset(math.index(index, math.range(0, B.length))), X)
-        ) - B[index]
-      );
-    });
-    var D = R.map((value) => value * -1); //D = -R
-    //calculate
-    while (true) {
-      ramda =
-        (-1 * math.multiply(math.transpose(D), R)) /
-        math.multiply(math.transpose(D), A, D); //ramda
-      X = X.map(
-        (value, index) => value + ramda * math.subset(D, math.index(index))
-      ); //Xk+1
-      R = B.map((value, index) => {
-        //Rk+1
+    try {
+      getMatrix();
+      let arr = datainput;
+      pushb();
+      let A = math.matrix(arr);
+      let B = bin;
+      let X = math.zeros(B.length);
+      let ECL = 0.001;
+      let err = Infinity;
+      let ramda = Infinity;
+      let alpha = Infinity;
+      let ans = [];
+      //pre iteration
+      var R = B.map((value, index) => {
+        //find R0
         return (
           math.squeeze(
             math.multiply(
@@ -89,25 +73,49 @@ function Conjugate_gradient() {
           ) - B[index]
         );
       });
-      err = math.sqrt(math.multiply(R, math.transpose(R))); //error
-      if (err <= ECL) {
-        break;
+      var D = R.map((value) => value * -1); //D = -R
+      //calculate
+      while (true) {
+        ramda =
+          (-1 * math.multiply(math.transpose(D), R)) /
+          math.multiply(math.transpose(D), A, D); //ramda
+        X = X.map(
+          (value, index) => value + ramda * math.subset(D, math.index(index))
+        ); //Xk+1
+        R = B.map((value, index) => {
+          //Rk+1
+          return (
+            math.squeeze(
+              math.multiply(
+                A.subset(math.index(index, math.range(0, B.length))),
+                X
+              )
+            ) - B[index]
+          );
+        });
+        err = math.sqrt(math.multiply(R, math.transpose(R))); //error
+        if (err <= ECL) {
+          break;
+        }
+        //for_nextiteration
+        alpha =
+          math.multiply(math.transpose(R), A, D) /
+          math.multiply(math.transpose(D), A, D); //alpha
+        D = R.map(
+          (value, index) =>
+            -1 * value + alpha * math.subset(D, math.index(index))
+        ); //Dk+1
       }
-      //for_nextiteration
-      alpha =
-        math.multiply(math.transpose(R), A, D) /
-        math.multiply(math.transpose(D), A, D); //alpha
-      D = R.map(
-        (value, index) => -1 * value + alpha * math.subset(D, math.index(index))
-      ); //Dk+1
+      for (let i = 0; i < X._data.length; i++) {
+        ans[i] = {
+          id: i,
+          ans: parseFloat("" + X._data[i]).toFixed(3),
+        };
+      }
+      return ans;
+    } catch (error) {
+      return "Error";
     }
-    for (let i = 0; i < X._data.length; i++) {
-      ans[i] = {
-        id: i,
-        ans: parseFloat("" + X._data[i]).toFixed(3),
-      };
-    }
-    return ans;
   };
   const createMatrix = (event) => {
     let row = [];
@@ -122,15 +130,17 @@ function Conjugate_gradient() {
     setRows(row);
   };
   const getMatrix = () => {
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -170,34 +180,40 @@ function Conjugate_gradient() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
-    modeb = 0;
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+      modeb = 0;
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(conjugate_gradient());
+    try {
+      setAns(conjugate_gradient());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
     setDimension(0);

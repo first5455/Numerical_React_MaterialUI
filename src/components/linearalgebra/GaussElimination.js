@@ -50,28 +50,30 @@ function GaussElimination() {
   const [ans, setAns] = useState([]);
   let bin = [];
   const gaussElimination = () => {
-    getMatrix();
-    let arr = toarray(datainput);
-    pushb();
-    let A = arr;
-    let B = [];
-    for (let i = 0; i < bin.length; i++) {
-      B[i] = new BigNumber(parseFloat(bin[i]));
-    }
-    let X;
-    var zero = new BigNumber(0);
-    GaussianElimination.defaultOptions.zero = zero;
-    var gaussianElimination = new GaussianElimination();
-    X = gaussianElimination.solve(A, B);
-    let ans = [];
-    let temp = X.solution;
-    for (let i = 0; i < temp.length; i++) {
-      ans[i] = {
-        id: i,
-        ans: parseFloat("" + temp[i]).toFixed(3),
-      };
-    }
-    return ans;
+    try {
+      getMatrix();
+      let arr = toarray(datainput);
+      pushb();
+      let A = arr;
+      let B = [];
+      for (let i = 0; i < bin.length; i++) {
+        B[i] = new BigNumber(parseFloat(bin[i]));
+      }
+      let X;
+      var zero = new BigNumber(0);
+      GaussianElimination.defaultOptions.zero = zero;
+      var gaussianElimination = new GaussianElimination();
+      X = gaussianElimination.solve(A, B);
+      let ans = [];
+      let temp = X.solution;
+      for (let i = 0; i < temp.length; i++) {
+        ans[i] = {
+          id: i,
+          ans: parseFloat("" + temp[i]).toFixed(3),
+        };
+      }
+      return ans;
+    } catch (error) {}
   };
   const createMatrix = (event) => {
     let row = [];
@@ -86,15 +88,17 @@ function GaussElimination() {
     setRows(row);
   };
   const getMatrix = () => {
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -134,40 +138,46 @@ function GaussElimination() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
-    modeb = 0;
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+      modeb = 0;
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(gaussElimination());
+    try {
+      setAns(gaussElimination());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
     setDimension(0);
     setRows();
     setInputs();
-}
+  };
   return (
     <div>
       <Grid container spacing={1}>

@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "../Table";
-const luqr = require('luqr').luqr
+const luqr = require("luqr").luqr;
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -36,30 +36,36 @@ function Lu() {
   const classes = useStyles();
   const [dimension, setDimension] = useState(0);
   const [rows, setRows] = useState();
-  let datainput,modeb = 0;
+  let datainput,
+    modeb = 0;
   let value = [
     [-2, 3, 1],
     [3, 4, -5],
     [1, -2, 1],
   ];
-  let valueb = [9,0,-4];
+  let valueb = [9, 0, -4];
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
-  const Lude = ()=>{
-    getMatrix();
-    let A = datainput;
-    pushb();
-    let B = bin;
-    let X = luqr.solveLU(A,B);
-    let ans = [];
-    for(let i =0;i<X.length;i++){
+  const Lude = () => {
+    try {
+      getMatrix();
+      let A = datainput;
+      pushb();
+      let B = bin;
+      let X = luqr.solveLU(A, B);
+      let ans = [];
+      for (let i = 0; i < X.length; i++) {
         ans[i] = {
-            id: i,
-            ans: parseFloat(""+X[i]).toFixed(3),}
+          id: i,
+          ans: parseFloat("" + X[i]).toFixed(3),
+        };
+      }
+      return ans;
+    } catch (error) {
+      return "Error"
     }
-    return ans;
-  }
+  };
   const createMatrix = (event) => {
     let row = [];
     for (let i = 0; i < dimension; i++) {
@@ -73,15 +79,17 @@ function Lu() {
     setRows(row);
   };
   const getMatrix = () => {
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -90,7 +98,10 @@ function Lu() {
       let temp = [];
       for (let j = 0; j < data[0].length; j++) {
         temp[j] = (
-          <input id={"r:" + i + "c:" + j} defaultValue={parseFloat(data[i][j])} />
+          <input
+            id={"r:" + i + "c:" + j}
+            defaultValue={parseFloat(data[i][j])}
+          />
         );
       }
       temp[data.length] = <br />;
@@ -117,40 +128,46 @@ function Lu() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
-    modeb = 0;
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+      modeb = 0;
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(Lude());
+    try {
+      setAns(Lude());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
     setDimension(0);
     setRows();
     setInputs();
-}
+  };
   return (
     <div>
       <Grid container spacing={1}>
@@ -160,39 +177,39 @@ function Lu() {
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
-            <TextField
-              InputProps={{ className: classes.input }}
-              variant="outlined"
-              value={dimension}
-              onInput={(e) => setDimension(e.target.value)}
-              label="Dimension"
-              style={{ backgroundColor: "whitesmoke" }}
-            />
-            <Button
-              variant="contained"
-              onClick={(e) => {
-                createMatrix(e);
-              }}
-            >
-              Set Matrix
-            </Button>
-            <Grid>{rows}</Grid>
-            <Button
-              variant="contained"
-              onClick={(e) => {
-                changeMatrix(e, value);
-              }}
-            >
-              load Matrix
-            </Button>
-            <Button
-              variant="contained"
-              onClick={(e) => {
-                resetMatrix(e);
-              }}
-            >
-              Reset Matrix
-            </Button>
+          <TextField
+            InputProps={{ className: classes.input }}
+            variant="outlined"
+            value={dimension}
+            onInput={(e) => setDimension(e.target.value)}
+            label="Dimension"
+            style={{ backgroundColor: "whitesmoke" }}
+          />
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              createMatrix(e);
+            }}
+          >
+            Set Matrix
+          </Button>
+          <Grid>{rows}</Grid>
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              changeMatrix(e, value);
+            }}
+          >
+            load Matrix
+          </Button>
+          <Button
+            variant="contained"
+            onClick={(e) => {
+              resetMatrix(e);
+            }}
+          >
+            Reset Matrix
+          </Button>
         </Grid>
         <Grid item xs={12} align="center">
           <Button variant="contained" onClick={controlInput} color="primary">

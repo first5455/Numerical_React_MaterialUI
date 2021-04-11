@@ -18,47 +18,53 @@ function Newton_divided() {
   const [inputsX, setInputsX] = useState([]);
   const [inputsY, setInputsY] = useState([]);
   const [xstart, setXstart] = useState(0);
-  const [ans, setAns] = useState('-');
+  const [ans, setAns] = useState("-");
   let Xin = [];
   let Yin = [];
   let Xdata = [0, 20000, 40000, 60000, 80000];
   let Ydata = [9.81, 9.7487, 9.6879, 9.6879, 9.5682];
   let XfindData = 42000;
   const newtonDivied = () => {
-    pushInput();
-    let x = Xin;
-    let y = Yin;
-    let xfind = xstart;
-    let C = (st, ed) => {
-      if (ed - st === 1) {
-        let output = (y[ed] - y[st]) / (x[ed] - x[st]);
-        return output;
-      } else {
-        let left = C(st + 1, ed);
-        let right = C(st, ed - 1);
-        let output = (left - right) / (x[ed] - x[st]);
-        return output;
-      }
-    };
-    let find = () => {
-      let sum = y[0];
-      for (let i = 1; i < x.length; i++) {
-        let temp2 = C(0, i);
-        for (let j = 0; j < i; j++) {
-          let temp = xfind - x[j];
-          temp2 *= temp;
+    try {
+      pushInput();
+      let x = Xin;
+      let y = Yin;
+      let xfind = xstart;
+      let C = (st, ed) => {
+        if (ed - st === 1) {
+          let output = (y[ed] - y[st]) / (x[ed] - x[st]);
+          return output;
+        } else {
+          let left = C(st + 1, ed);
+          let right = C(st, ed - 1);
+          let output = (left - right) / (x[ed] - x[st]);
+          return output;
         }
-        sum += temp2;
-      }
-      return sum;
-    };
-    return find(xfind);
+      };
+      let find = () => {
+        let sum = y[0];
+        for (let i = 1; i < x.length; i++) {
+          let temp2 = C(0, i);
+          for (let j = 0; j < i; j++) {
+            let temp = xfind - x[j];
+            temp2 *= temp;
+          }
+          sum += temp2;
+        }
+        return sum;
+      };
+      return find(xfind);
+    } catch (error) {
+      return "Error";
+    }
   };
   const pushInput = () => {
-    for (let i = 0; i < sizeInputs; i++) {
-      Xin.push(parseFloat(document.getElementById("X" + i).value));
-      Yin.push(parseFloat(document.getElementById("Y" + i).value));
-    }
+    try {
+      for (let i = 0; i < sizeInputs; i++) {
+        Xin.push(parseFloat(document.getElementById("X" + i).value));
+        Yin.push(parseFloat(document.getElementById("Y" + i).value));
+      }
+    } catch (error) {}
   };
   const controlInput2 = (event) => {
     event.preventDefault();
@@ -127,10 +133,12 @@ function Newton_divided() {
     setInputsY();
     setSizeInputs(0);
     setXstart(0);
-    setAns('-');
+    setAns("-");
   };
   const handle = (event) => {
-    setAns(newtonDivied());
+    try {
+      setAns(newtonDivied());
+    } catch (error) {}
   };
   return (
     <div>
@@ -185,7 +193,7 @@ function Newton_divided() {
           </Button>
         </Grid>
         <Grid item xs={12}>
-        <Typography variant="h4" align="center">
+          <Typography variant="h4" align="center">
             Answer f(x) in x = {xstart} is {ans}
           </Typography>
         </Grid>

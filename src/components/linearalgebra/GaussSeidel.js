@@ -51,54 +51,58 @@ function Gauss_seidel() {
   let bin = [];
   let xin = [];
   const gaussSeidel = () => {
-    getMatrix();
-    pushb();
-    pushx();
-    let arr = datainput;
-    let A = math.matrix(arr);
-    let B = bin;
-    let X = xin;
-    console.log(B);
-    let ECL = 0.000001;
-    let check = [false, false, false];
-    let r = 0;
-    let ans = [];
-    let stop = false;
-    while (true) {
-      var i = 0,
-        err = Infinity;
-      while (i < B.length) {
-        var xnew = 0;
-        var aii = A.subset(math.index(i, i));
-        var res = math.multiply(
-          A.subset(math.index(i, math.range(0, B.length))),
-          X
-        );
-        res = math.squeeze(res);
-        xnew = (B[i] + aii * X[i] - res) / aii;
-        err = Math.abs((xnew - X[i]) / xnew);
-        if (err <= ECL) {
-          check[i] = true;
+    try {
+      getMatrix();
+      pushb();
+      pushx();
+      let arr = datainput;
+      let A = math.matrix(arr);
+      let B = bin;
+      let X = xin;
+      console.log(B);
+      let ECL = 0.000001;
+      let check = [false, false, false];
+      let r = 0;
+      let ans = [];
+      let stop = false;
+      while (true) {
+        var i = 0,
+          err = Infinity;
+        while (i < B.length) {
+          var xnew = 0;
+          var aii = A.subset(math.index(i, i));
+          var res = math.multiply(
+            A.subset(math.index(i, math.range(0, B.length))),
+            X
+          );
+          res = math.squeeze(res);
+          xnew = (B[i] + aii * X[i] - res) / aii;
+          err = Math.abs((xnew - X[i]) / xnew);
+          if (err <= ECL) {
+            check[i] = true;
+          }
+          X[i] = xnew;
+          i++;
         }
-        X[i] = xnew;
-        i++;
+        for (let i = 0; i < check.length; i++) {
+          stop = stop && check[i];
+        }
+        if (stop === true) break;
+        if (r >= 100) {
+          break;
+        }
+        r++;
       }
-      for(let i =0 ; i<check.length;i++){
-        stop = (stop&&check[i])
+      for (let i = 0; i < X.length; i++) {
+        ans[i] = {
+          id: i,
+          ans: parseFloat("" + X[i]).toFixed(3),
+        };
       }
-      if (stop === true) break;
-      if (r >= 100) {
-        break;
-      }
-      r++;
+      return ans;
+    } catch (error) {
+      return "Error"
     }
-    for (let i = 0; i < X.length; i++) {
-      ans[i] = {
-        id: i,
-        ans: parseFloat("" + X[i]).toFixed(3),
-      };
-    }
-    return ans;
   };
   const createMatrix = (event) => {
     let row = [];
@@ -113,16 +117,18 @@ function Gauss_seidel() {
     setRows(row);
   };
   const getMatrix = () => {
-    modeb = 0;
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      modeb = 0;
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -176,66 +182,76 @@ function Gauss_seidel() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+    } catch (error) {}
   };
   const pushx = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      xin.push(parseFloat(document.getElementById("X" + i).value));
-    }
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        xin.push(parseFloat(document.getElementById("X" + i).value));
+      }
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const controlInput2 = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"X" + i}
-            variant="outlined"
-            label={"X" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputsx(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"X" + i}
+              variant="outlined"
+              label={"X" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputsx(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(gaussSeidel());
+    try {
+      setAns(gaussSeidel());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
-      setDimension(0);
-      setRows();
-      setInputs();
-      setInputsx();
-  }
+    setDimension(0);
+    setRows();
+    setInputs();
+    setInputsx();
+  };
   return (
     <div>
       <Grid container spacing={1}>

@@ -19,15 +19,15 @@ const useStyles = makeStyles({
   },
 });
 addStyles();
-const Diff = (FX,X) => {
+const Diff = (FX, X) => {
   const latexInput = FX;
-  const latexrepacle = latexInput.replace('\\exp',' exp');
+  const latexrepacle = latexInput.replace("\\exp", " exp");
   const algebraObj = new AlgebraLatex().parseLatex(latexrepacle);
   let text = algebraObj.toMath();
-  let expr = derivative(text, 'x');
-  let scope = {x:parseFloat(X)};
+  let expr = derivative(text, "x");
+  let scope = { x: parseFloat(X) };
   return expr.evaluate(scope);
-}
+};
 const columns = [
   {
     field: "id",
@@ -72,35 +72,41 @@ function Newton_raphson() {
   const [x, setX] = useState(0);
   const [datainput, setDatainput] = useState([]);
   const Newton = (n) => {
-    let error = 1,
-      i = 0,
-      old = parseFloat(n),
-      xnew = 0;
-    let data = [];
-    while (error > 0.000001) {
-      let diffx = Diff(latex,old);
-      let fx = convert(latex, old);
-      xnew = old - (fx / diffx);
-      let fxnew = convert(latex,xnew);
-      let sum = (xnew - old) / xnew;
-      error = Math.abs(sum);
-      if(xnew.toFixed(6)<=0.000000){
-        break;
+    try {
+      let error = 1,
+        i = 0,
+        old = parseFloat(n),
+        xnew = 0;
+      let data = [];
+      while (error > 0.000001) {
+        let diffx = Diff(latex, old);
+        let fx = convert(latex, old);
+        xnew = old - fx / diffx;
+        let fxnew = convert(latex, xnew);
+        let sum = (xnew - old) / xnew;
+        error = Math.abs(sum);
+        if (xnew.toFixed(6) <= 0.0) {
+          break;
+        }
+        data[i] = {
+          id: i,
+          fx: fxnew.toFixed(6),
+          x: xnew.toFixed(6),
+          error: error.toFixed(6),
+        };
+        old = xnew;
+        i++;
       }
-      data[i] = {
-        id: i,
-        fx: fxnew.toFixed(6),
-        x: xnew.toFixed(6),
-        error: error.toFixed(6),
-      };
-      old=xnew;
-      i++;
+      return data;
+    } catch (error) {
+      return "Error"
     }
-    return data;
   };
   const handleChange = (event) => {
-    event.preventDefault();
-    setDatainput(Newton(x));
+    try {
+      event.preventDefault();
+      setDatainput(Newton(x));
+    } catch (error) {}
   };
   return (
     <div>

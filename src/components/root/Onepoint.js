@@ -1,27 +1,22 @@
-import {React, useState} from 'react'
-import Graph from '../Graph'
-import { convert } from '../convert'
-import Table from '../Table'
+import { React, useState } from "react";
+import Graph from "../Graph";
+import { convert } from "../convert";
+import Table from "../Table";
 import { addStyles, EditableMathField } from "react-mathquill";
-import {
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { number } from "mathjs"
+import { number } from "mathjs";
 const useStyles = makeStyles({
-    root: {
-      minWidth: 275,
-    },
-    centerText: {
-      textAlign: "center",
-    },
-    input: {
-      color: "black",
-    },
-  });
+  root: {
+    minWidth: 275,
+  },
+  centerText: {
+    textAlign: "center",
+  },
+  input: {
+    color: "black",
+  },
+});
 addStyles();
 function Onepoint() {
   const [latex, setLatex] = useState("");
@@ -57,32 +52,38 @@ function Onepoint() {
     },
   ];
   const OnepointIteration = (xn) => {
-    let error = 1,
-      old = 0,
-      i = 0,
-      m = parseFloat(xn);
-    let data = [];
-    while (error > 0.000001) {
-      let fnm = convert(latex, m);
-      m=fnm
-      let sum = (m - old) / m;
-      error = Math.abs(sum);
-      if(m.toFixed(6)<=0.000000){
-        break;
+    try {
+      let error = 1,
+        old = 0,
+        i = 0,
+        m = parseFloat(xn);
+      let data = [];
+      while (error > 0.000001) {
+        let fnm = convert(latex, m);
+        m = fnm;
+        let sum = (m - old) / m;
+        error = Math.abs(sum);
+        if (m.toFixed(6) <= 0.0) {
+          break;
+        }
+        data[i] = {
+          id: i,
+          x: m.toFixed(6),
+          error: error.toFixed(6),
+        };
+        old = m;
+        i++;
       }
-      data[i] = {
-        id: i,
-        x: m.toFixed(6),
-        error: error.toFixed(6),
-      };
-      old = m;
-      i++;
+      return data;
+    } catch (error) {
+      return "Error"
     }
-    return data;
   };
   const handleChange = (event) => {
-    event.preventDefault();
-    setDatainput(OnepointIteration(x));
+    try {
+      event.preventDefault();
+      setDatainput(OnepointIteration(x));
+    } catch (error) {}
   };
 
   const classes = useStyles();
@@ -95,7 +96,7 @@ function Onepoint() {
           </Typography>
         </Grid>
         <Grid item xs={7} align="center">
-        <Typography>ใส่ค่า X</Typography>
+          <Typography>ใส่ค่า X</Typography>
           <form action="" onSubmit={handleChange}>
             <Grid item xs={3}>
               {/* Input x */}
@@ -114,14 +115,16 @@ function Onepoint() {
             </Grid>
           </form>
           {/* Table */}
-          <Table rows={datainput} columns={columns}/>
-          <Typography>**ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**</Typography>
+          <Table rows={datainput} columns={columns} />
+          <Typography>
+            **ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**
+          </Typography>
         </Grid>
         <Grid item xs={5} align="center">
           <Typography>Math Function for x</Typography>
           {/* Input Latex Field*/}
           <EditableMathField
-            style={{ width: 200,backgroundColor: "whitesmoke" }}
+            style={{ width: 200, backgroundColor: "whitesmoke" }}
             latex={latex}
             onChange={(mathField) => {
               setLatex(mathField.latex());

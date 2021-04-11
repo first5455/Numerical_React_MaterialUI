@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import regression from 'regression'
+import regression from "regression";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -17,46 +17,61 @@ function Linear() {
   const classes = useStyles();
   const [sizepoint, setSizepoint] = useState(0);
   const [inputsX, setInputX] = useState();
-  const [inputsY,setInputY] = useState();
+  const [inputsY, setInputY] = useState();
   const [ans, setAns] = useState();
   let Xin = [];
   let Yin = [];
-  let value = [[10,5],[15,9],[20,15],[30,18],[40,22],[50,30],[60,35],[70,38],[80,43]]
+  let value = [
+    [10, 5],
+    [15, 9],
+    [20, 15],
+    [30, 18],
+    [40, 22],
+    [50, 30],
+    [60, 35],
+    [70, 38],
+    [80, 43],
+  ];
   let point = [];
-  const liner_regress = ()=>{
+  const liner_regress = () => {
+    try {
       pushInput();
       let output = regression.linear(point).equation;
-      let ans = "["
-      for(let i =0;i<output.length;i++){
-          if(i===output.length-1){
-            ans+=output[i]+"" 
-          }
-          else{
-            ans+=output[i]+","
-          }
+      let ans = "[";
+      for (let i = 0; i < output.length; i++) {
+        if (i === output.length - 1) {
+          ans += output[i] + "";
+        } else {
+          ans += output[i] + ",";
+        }
       }
-      ans+="]"
+      ans += "]";
       return ans;
-  }
-  const pushInput = () => {
-    let temp = [];
-    for (let i = 0; i < sizepoint; i++) {
-      Xin.push(parseFloat(document.getElementById("X" + i).value));
-      Yin.push(parseFloat(document.getElementById("Y" + i).value));
-      temp.push([Xin[i],Yin[i]])
+    } catch (error) {
+      return "Error"
     }
-    point = temp;
+  };
+  const pushInput = () => {
+    try {
+      let temp = [];
+      for (let i = 0; i < sizepoint; i++) {
+        Xin.push(parseFloat(document.getElementById("X" + i).value));
+        Yin.push(parseFloat(document.getElementById("Y" + i).value));
+        temp.push([Xin[i], Yin[i]]);
+      }
+      point = temp;
+    } catch (error) {}
   };
   const reset = (event) => {
-      setSizepoint(0);
-      setInputX();
-      setInputY();
-      setAns();
+    setSizepoint(0);
+    setInputX();
+    setInputY();
+    setAns();
   };
   const controlInput2 = (event) => {
     event.preventDefault();
     let fieldx = [];
-    let fieldy= [];
+    let fieldy = [];
     for (let i = 0; i < value.length; i++) {
       fieldx[i] = (
         <Grid>
@@ -88,7 +103,7 @@ function Linear() {
   const controlInput = (event) => {
     event.preventDefault();
     let fieldx = [];
-    let fieldy= [];
+    let fieldy = [];
     for (let i = 0; i < sizepoint; i++) {
       fieldx[i] = (
         <Grid>
@@ -116,7 +131,7 @@ function Linear() {
   };
   const handle = (event) => {
     try {
-        setAns(liner_regress());
+      setAns(liner_regress());
     } catch (error) {}
   };
   return (

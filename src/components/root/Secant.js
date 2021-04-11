@@ -71,97 +71,105 @@ function Secant() {
     },
   ];
   const secantmethod = (xf, xs) => {
-    let error = 1,
-      x0 = parseFloat(xf),
-      i = 0,
-      xn = 0,
-      f0 = 0,
-      f1 = 0,
-      x1 = parseFloat(xs);
-    let data = [];
-    while (error > 0.000001) {
-      f0=convert(latex,x0);
-      f1=convert(latex,x1);
-      xn=x1-(f1*(x1-x0))/(f1-f0);
-      let sum = (xn - x1) / xn;
-      error = Math.abs(sum);
-      if(xn.toFixed(6)<=0.000000){
-        break;
+    try {
+      let error = 1,
+        x0 = parseFloat(xf),
+        i = 0,
+        xn = 0,
+        f0 = 0,
+        f1 = 0,
+        x1 = parseFloat(xs);
+      let data = [];
+      while (error > 0.000001) {
+        f0 = convert(latex, x0);
+        f1 = convert(latex, x1);
+        xn = x1 - (f1 * (x1 - x0)) / (f1 - f0);
+        let sum = (xn - x1) / xn;
+        error = Math.abs(sum);
+        if (xn.toFixed(6) <= 0.0) {
+          break;
+        }
+        data[i] = {
+          id: i,
+          xf: x0.toFixed(6),
+          xs: x1.toFixed(6),
+          x: xn.toFixed(6),
+          error: error.toFixed(6),
+        };
+        x0 = x1;
+        x1 = xn;
+        i++;
       }
-      data[i] = {
-        id: i,
-        xf: x0.toFixed(6),
-        xs: x1.toFixed(6),
-        x: xn.toFixed(6),
-        error: error.toFixed(6),
-      };
-      x0=x1;
-      x1=xn;
-      i++;
+      return data;
+    } catch (error) {
+      return "Error"
     }
-    return data;
   };
 
   const handleChange = (event) => {
-    event.preventDefault();
-    setDatainput(secantmethod(x0, x1));
+    try {
+      event.preventDefault();
+      setDatainput(secantmethod(x0, x1));
+    } catch (error) {}
   };
   const classes = useStyles();
   return (
     <div>
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant="h4" align="center">
-          Secant Method
-        </Typography>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="h4" align="center">
+            Secant Method
+          </Typography>
+        </Grid>
+        <Grid item xs={7} align="center">
+          <Typography>ใส่ค่า X0 และ X1</Typography>
+          <form action="" onSubmit={handleChange}>
+            <Grid item xs={3}>
+              {/* Input xl */}
+              <TextField
+                InputProps={{ className: classes.input }}
+                variant="outlined"
+                onInput={(e) => setX0(e.target.value)}
+                label="X0"
+                style={{ backgroundColor: "whitesmoke" }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              {/* Input xr */}
+              <TextField
+                InputProps={{ className: classes.input }}
+                variant="outlined"
+                onInput={(e) => setX1(e.target.value)}
+                label="X1"
+                style={{ backgroundColor: "whitesmoke" }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Grid>
+          </form>
+          {/* Table */}
+          <Table rows={datainput} columns={columns} />
+          <Typography>
+            **ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**
+          </Typography>
+        </Grid>
+        <Grid item xs={5} align="center">
+          <Typography>Math Function</Typography>
+          {/* Input Latex Field*/}
+          <EditableMathField
+            style={{ width: 200, backgroundColor: "whitesmoke" }}
+            latex={latex}
+            onChange={(mathField) => {
+              setLatex(mathField.latex());
+            }}
+          />
+          <Graph latex={latex} />
+        </Grid>
       </Grid>
-      <Grid item xs={7} align="center">
-      <Typography>ใส่ค่า X0 และ X1</Typography>
-        <form action="" onSubmit={handleChange}>
-          <Grid item xs={3}>
-            {/* Input xl */}
-            <TextField
-              InputProps={{ className: classes.input }}
-              variant="outlined"
-              onInput={(e) => setX0(e.target.value)}
-              label="X0"
-              style={{ backgroundColor: "whitesmoke" }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            {/* Input xr */}
-            <TextField
-              InputProps={{ className: classes.input }}
-              variant="outlined"
-              onInput={(e) => setX1(e.target.value)}
-              label="X1"
-              style={{ backgroundColor: "whitesmoke" }}
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
-          </Grid>
-        </form>
-        {/* Table */}
-        <Table rows={datainput} columns={columns} />
-        <Typography>**ค่าที่แสดงในตารางเป็นค่าจากการปัดเศษทศนิยม 6 จุด**</Typography>
-      </Grid>
-      <Grid item xs={5} align="center">
-        <Typography>Math Function</Typography>
-        {/* Input Latex Field*/}
-        <EditableMathField
-          style={{ width: 200,backgroundColor: "whitesmoke" }}
-          latex={latex}
-          onChange={(mathField) => {
-            setLatex(mathField.latex());
-          }}
-        />
-        <Graph latex={latex} />
-      </Grid>
-    </Grid>
-  </div>
+    </div>
   );
 }
 export default Secant;

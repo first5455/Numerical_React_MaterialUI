@@ -38,31 +38,34 @@ function Gauss_jordan() {
   const classes = useStyles();
   const [dimension, setDimension] = useState(0);
   const [rows, setRows] = useState();
-  let datainput,modeb = 0;
+  let datainput,
+    modeb = 0;
   let value = [
     [-2, 3, 1],
     [3, 4, -5],
     [1, -2, 1],
   ];
-  let valueb = [9,0,-4];
+  let valueb = [9, 0, -4];
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
   const gaussJordans = () => {
-    getMatrix();
-    let arr = toarray(datainput);
-    let A = arr;
-    pushb();
-    let B = bin;
-    let ans = [];
-    let temp = linSystem.solve(A, B);
-    for (let i = 0; i < temp.length; i++) {
-      ans[i] = {
-        id: i,
-        ans: parseFloat("" + temp[i]).toFixed(3),
-      };
-    }
-    return ans;
+    try {
+      getMatrix();
+      let arr = toarray(datainput);
+      let A = arr;
+      pushb();
+      let B = bin;
+      let ans = [];
+      let temp = linSystem.solve(A, B);
+      for (let i = 0; i < temp.length; i++) {
+        ans[i] = {
+          id: i,
+          ans: parseFloat("" + temp[i]).toFixed(3),
+        };
+      }
+      return ans;
+    } catch (error) {}
   };
   const createMatrix = (event) => {
     let row = [];
@@ -77,15 +80,17 @@ function Gauss_jordan() {
     setRows(row);
   };
   const getMatrix = () => {
-    let d = [];
-    for (let i = 0; i < dimension; i++) {
-      let temp = [];
-      for (let j = 0; j < dimension; j++) {
-        temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+    try {
+      let d = [];
+      for (let i = 0; i < dimension; i++) {
+        let temp = [];
+        for (let j = 0; j < dimension; j++) {
+          temp[j] = parseFloat(document.getElementById(`r:${i}c:${j}`).value);
+        }
+        d[i] = temp;
       }
-      d[i] = temp;
-    }
-    datainput = d;
+      datainput = d;
+    } catch (error) {}
   };
 
   const changeMatrix = (event, data) => {
@@ -94,7 +99,10 @@ function Gauss_jordan() {
       let temp = [];
       for (let j = 0; j < data[0].length; j++) {
         temp[j] = (
-          <input id={"r:" + i + "c:" + j} defaultValue={parseFloat(data[i][j])} />
+          <input
+            id={"r:" + i + "c:" + j}
+            defaultValue={parseFloat(data[i][j])}
+          />
         );
       }
       temp[data.length] = <br />;
@@ -121,40 +129,46 @@ function Gauss_jordan() {
     setRows(row);
   };
   const pushb = () => {
-    if (modeb === 1) {
-      datainput = value;
-    }
-    for (let i = 0; i < datainput[0].length; i++) {
-      bin.push(parseFloat(document.getElementById("B" + i).value));
-    }
-    modeb = 0;
+    try {
+      if (modeb === 1) {
+        datainput = value;
+      }
+      for (let i = 0; i < datainput[0].length; i++) {
+        bin.push(parseFloat(document.getElementById("B" + i).value));
+      }
+      modeb = 0;
+    } catch (error) {}
   };
   const controlInput = (event) => {
-    event.preventDefault();
-    getMatrix();
-    let field = [];
-    for (let i = 0; i < datainput[0].length; i++) {
-      field[i] = (
-        <Grid>
-          <TextField
-            id={"B" + i}
-            variant="outlined"
-            label={"B" + i}
-            InputProps={{ className: classes.input }}
-          />
-        </Grid>
-      );
-    }
-    setInputs(field);
+    try {
+      event.preventDefault();
+      getMatrix();
+      let field = [];
+      for (let i = 0; i < datainput[0].length; i++) {
+        field[i] = (
+          <Grid>
+            <TextField
+              id={"B" + i}
+              variant="outlined"
+              label={"B" + i}
+              InputProps={{ className: classes.input }}
+            />
+          </Grid>
+        );
+      }
+      setInputs(field);
+    } catch (error) {}
   };
   const handle = (event) => {
-    setAns(gaussJordans());
+    try {
+      setAns(gaussJordans());
+    } catch (error) {}
   };
   const resetMatrix = (event) => {
     setDimension(0);
     setRows();
     setInputs();
-}
+  };
   return (
     <div>
       <Grid container spacing={1}>

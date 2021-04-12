@@ -23,6 +23,9 @@ function Bisection() {
   const [xl, setXl] = useState(0);
   const [xr, setXr] = useState(0);
   const [datainput, setDatainput] = useState([]);
+  let valuexl = 0;
+  let valuexr = 1;
+  let valueinput = "cos(x) - x * exp(x)";
   const columns = [
     {
       field: "id",
@@ -71,6 +74,7 @@ function Bisection() {
     },
   ];
   const bisection = (xnl, xnr) => {
+    console.log(xnl,xnr)
     try {
       let error = 1,
         old = 1000,
@@ -104,11 +108,25 @@ function Bisection() {
         old = m;
         i++;
       }
-
       return data;
     } catch (error) {
-      return "Error"
+      return [];
     }
+  };
+  const reset = ()=>{
+    setLatex("");
+    setXl(0);
+    setXr(0);
+    setDatainput([]);
+  }
+  const handleChange2 = (event) => {
+    try {
+      event.preventDefault();
+      reset();
+      setLatex(valueinput)
+      setXl(valuexl);
+      setXr(valuexr);
+    } catch (error) {}
   };
   const handleChange = (event) => {
     try {
@@ -134,6 +152,7 @@ function Bisection() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={xl}
                 onInput={(e) => setXl(e.target.value)}
                 label="XL"
                 style={{ backgroundColor: "whitesmoke" }}
@@ -144,14 +163,21 @@ function Bisection() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={xr}
                 onInput={(e) => setXr(e.target.value)}
                 label="XR"
                 style={{ backgroundColor: "whitesmoke" }}
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={3}>
               <Button type="submit" variant="contained" color="primary">
                 Submit
+              </Button>
+              <Button onClick={handleChange2} variant="contained" color="primary">
+                Example
+              </Button>
+              <Button onClick={reset} variant="contained" color="primary">
+                Reset
               </Button>
             </Grid>
           </form>

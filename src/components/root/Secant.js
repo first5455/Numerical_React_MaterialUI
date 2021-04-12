@@ -23,6 +23,9 @@ function Secant() {
   const [x0, setX0] = useState(0);
   const [x1, setX1] = useState(0);
   const [datainput, setDatainput] = useState([]);
+  let valuex0 = 0;
+  let valuex1 = 1;
+  let valueinput = "x*x*x - 2*x - 5";
   const columns = [
     {
       field: "id",
@@ -71,6 +74,7 @@ function Secant() {
     },
   ];
   const secantmethod = (xf, xs) => {
+    console.log(xf, xs);
     try {
       let error = 1,
         x0 = parseFloat(xf),
@@ -86,9 +90,6 @@ function Secant() {
         xn = x1 - (f1 * (x1 - x0)) / (f1 - f0);
         let sum = (xn - x1) / xn;
         error = Math.abs(sum);
-        if (xn.toFixed(6) <= 0.0) {
-          break;
-        }
         data[i] = {
           id: i,
           xf: x0.toFixed(6),
@@ -100,12 +101,27 @@ function Secant() {
         x1 = xn;
         i++;
       }
+      console.log(data);
       return data;
     } catch (error) {
-      return "Error"
+      return "Error";
     }
   };
-
+  const reset = ()=>{
+    setLatex("");
+    setX0(0);
+    setX1(0);
+    setDatainput([]);
+  }
+  const handleChange2 = (event) => {
+    try {
+      event.preventDefault();
+      reset();
+      setLatex(valueinput)
+      setX0(valuex0);
+      setX1(valuex1);
+    } catch (error) {}
+  };
   const handleChange = (event) => {
     try {
       event.preventDefault();
@@ -129,6 +145,7 @@ function Secant() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={x0}
                 onInput={(e) => setX0(e.target.value)}
                 label="X0"
                 style={{ backgroundColor: "whitesmoke" }}
@@ -139,14 +156,21 @@ function Secant() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={x1}
                 onInput={(e) => setX1(e.target.value)}
                 label="X1"
                 style={{ backgroundColor: "whitesmoke" }}
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={3}>
               <Button type="submit" variant="contained" color="primary">
                 Submit
+              </Button>
+              <Button onClick={handleChange2} variant="contained" color="primary">
+                Example
+              </Button>
+              <Button onClick={reset} variant="contained" color="primary">
+                Reset
               </Button>
             </Grid>
           </form>

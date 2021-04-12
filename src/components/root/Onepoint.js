@@ -22,6 +22,8 @@ function Onepoint() {
   const [latex, setLatex] = useState("");
   const [x, setX] = useState(0);
   const [datainput, setDatainput] = useState([]);
+  let valuex = 1;
+  let valueinput = "(1+cos(x))/3";
   const columns = [
     {
       field: "id",
@@ -76,8 +78,21 @@ function Onepoint() {
       }
       return data;
     } catch (error) {
-      return "Error"
+      return []
     }
+  };
+  const reset = ()=>{
+    setLatex("");
+    setX(0);
+    setDatainput([]);
+  }
+  const handleChange2 = (event) => {
+    try {
+      event.preventDefault();
+      reset();
+      setLatex(valueinput);
+      setX(valuex);
+    } catch (error) {}
   };
   const handleChange = (event) => {
     try {
@@ -103,14 +118,21 @@ function Onepoint() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={x}
                 onInput={(e) => setX(e.target.value)}
                 label="X"
                 style={{ backgroundColor: "whitesmoke" }}
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={3}>
               <Button type="submit" variant="contained" color="primary">
                 Submit
+              </Button>
+              <Button onClick={handleChange2} variant="contained" color="primary">
+                Example
+              </Button>
+              <Button onClick={reset} variant="contained" color="primary">
+                Reset
               </Button>
             </Grid>
           </form>

@@ -71,6 +71,8 @@ function Newton_raphson() {
   const [latex, setLatex] = useState("");
   const [x, setX] = useState(0);
   const [datainput, setDatainput] = useState([]);
+  let valuex = 2;
+  let valueinput = "3*x - cos(x) -1";
   const Newton = (n) => {
     try {
       let error = 1,
@@ -99,8 +101,21 @@ function Newton_raphson() {
       }
       return data;
     } catch (error) {
-      return "Error"
+      return []
     }
+  };
+  const reset = ()=>{
+    setLatex("");
+    setX(0);
+    setDatainput([]);
+  }
+  const handleChange2 = (event) => {
+    try {
+      event.preventDefault();
+      reset();
+      setLatex(valueinput);
+      setX(valuex);
+    } catch (error) {}
   };
   const handleChange = (event) => {
     try {
@@ -124,14 +139,21 @@ function Newton_raphson() {
               <TextField
                 InputProps={{ className: classes.input }}
                 variant="outlined"
+                value={x}
                 onInput={(e) => setX(e.target.value)}
                 label="X"
                 style={{ backgroundColor: "whitesmoke" }}
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={3}>
               <Button type="submit" variant="contained" color="primary">
                 Submit
+              </Button>
+              <Button onClick={handleChange2} variant="contained" color="primary">
+                Example
+              </Button>
+              <Button onClick={reset} variant="contained" color="primary">
+                Reset
               </Button>
             </Grid>
           </form>

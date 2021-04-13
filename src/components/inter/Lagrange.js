@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import API from "../api"
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -22,9 +23,9 @@ function Lagrange() {
   const [ans, setAns] = useState("-");
   let Xin = [];
   let Yin = [];
-  let Xdata = [0, 20000, 40000, 60000, 80000];
-  let Ydata = [9.81, 9.7487, 9.6879, 9.6879, 9.5682];
-  let XfindData = 42000;
+  let Xdata ;
+  let Ydata ;
+  let XfindData ;
   const lagrange = () => {
     try {
       pushInput();
@@ -54,7 +55,12 @@ function Lagrange() {
       }
     } catch (error) {}
   };
-  const controlInput2 = (event) => {
+  const controlInput2 = async(event) => {
+    await API.get("example/lagrange").then((res) => {
+      Xdata = res.data.arrayX;
+      Ydata = res.data.arrayY;
+      XfindData = res.data.xfind
+    });
     event.preventDefault();
     let fieldx = [];
     let fieldy = [];

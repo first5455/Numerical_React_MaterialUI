@@ -20,15 +20,28 @@ function Home() {
           <Grid item xs={12}>
             <Card
               className={classes.root}
-              style={{ backgroundColor: "#ff9100" }}
+              style={{
+                backgroundColor: "#ff9100",
+                height: 200,
+                textAlign: "center",
+                rounded: true,
+                paddingTop: 65,
+                opacity: 0.8,
+              }}
             >
               <CardContent>
                 <Typography variant="h4" align="center" color="textPrimary">
                   Welcome to Numerical Website
                 </Typography>
               </CardContent>
+              <CardContent>
+                <Typography variant="h6" align="center" color="textPrimary">
+                  Created from ReactJS
+                </Typography>
+              </CardContent>
             </Card>
           </Grid>
+          <Grid item xs={12}></Grid>
         </Grid>
       </BrowserRouter>
     </div>

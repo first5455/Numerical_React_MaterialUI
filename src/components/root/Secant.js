@@ -6,6 +6,7 @@ import { addStyles, EditableMathField } from "react-mathquill";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { number } from "mathjs";
+import API from "../api"
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -23,9 +24,9 @@ function Secant() {
   const [x0, setX0] = useState(0);
   const [x1, setX1] = useState(0);
   const [datainput, setDatainput] = useState([]);
-  let valuex0 = 0;
-  let valuex1 = 1;
-  let valueinput = "x*x*x - 2*x - 5";
+  let valuex0 ;
+  let valuex1 ;
+  let valueinput ;
   const columns = [
     {
       field: "id",
@@ -74,7 +75,6 @@ function Secant() {
     },
   ];
   const secantmethod = (xf, xs) => {
-    console.log(xf, xs);
     try {
       let error = 1,
         x0 = parseFloat(xf),
@@ -113,8 +113,13 @@ function Secant() {
     setX1(0);
     setDatainput([]);
   }
-  const handleChange2 = (event) => {
+  const handleChange2 = async(event) => {
     try {
+      await API.get("example/secant").then((res) => {
+        valuex0 = res.data.xl;
+        valuex1 = res.data.xr;
+        valueinput = res.data.latex;
+      });
       event.preventDefault();
       reset();
       setLatex(valueinput)

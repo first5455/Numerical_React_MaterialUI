@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import API from "../api"
 const { regression } = require("multiregress");
 const useStyles = makeStyles({
   root: {
@@ -20,15 +21,7 @@ function MultipleLinear() {
   const [inputsX, setInputX] = useState();
   const [inputsY, setInputY] = useState();
   const [ans, setAns] = useState();
-  let value = [
-    [1, 0, 1, 4],
-    [0, 1, 3, -5],
-    [2, 4, 1, -6],
-    [3, 2, 2, 0],
-    [4, 1, 5, -1],
-    [2, 3, 3, -7],
-    [1, 6, 4, -20],
-  ];
+  let value ;
   let point = [];
   const multi_linear_regress = () => {
     try {
@@ -71,7 +64,11 @@ function MultipleLinear() {
     setInputY();
     setAns();
   };
-  const controlInput2 = (event) => {
+  const controlInput2 = async(event) => {
+    await API.get("example/multiplelinear").then((res) => {
+      value = res.data.arrayInput;
+      console.log(res.data.arrayInput)
+    });
     event.preventDefault();
     let fieldx = [];
     let fieldy = [];
@@ -109,6 +106,7 @@ function MultipleLinear() {
     setInputY(fieldy);
   };
   const controlInput = (event) => {
+
     event.preventDefault();
     let fieldx = [];
     let fieldy = [];

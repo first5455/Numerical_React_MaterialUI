@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import regression from "regression";
+import API from "../api"
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -21,17 +22,7 @@ function Linear() {
   const [ans, setAns] = useState();
   let Xin = [];
   let Yin = [];
-  let value = [
-    [10, 5],
-    [15, 9],
-    [20, 15],
-    [30, 18],
-    [40, 22],
-    [50, 30],
-    [60, 35],
-    [70, 38],
-    [80, 43],
-  ];
+  let value ;
   let point = [];
   const liner_regress = () => {
     try {
@@ -68,7 +59,11 @@ function Linear() {
     setInputY();
     setAns();
   };
-  const controlInput2 = (event) => {
+  const controlInput2 = async(event) => {
+    await API.get("example/linear").then((res) => {
+      value = res.data.arrayInput;
+      console.log(res.data.arrayInput)
+    });
     event.preventDefault();
     let fieldx = [];
     let fieldy = [];

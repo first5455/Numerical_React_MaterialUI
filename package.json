@@ -2,6 +2,7 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/data-grid": "^4.0.0-alpha.24",
@@ -14,6 +15,7 @@
     "bignumber.js": "^9.0.1",
     "cubic-spline": "^3.0.3",
     "desmos": "^1.5.4",
+    "http-proxy-middleware": "^1.1.1",
     "linear-equation-system": "^1.1.1",
     "luqr": "^0.3.0",
     "mathjs": "^9.3.0",

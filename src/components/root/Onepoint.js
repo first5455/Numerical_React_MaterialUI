@@ -6,6 +6,7 @@ import { addStyles, EditableMathField } from "react-mathquill";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { number } from "mathjs";
+import API from "../api"
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -22,8 +23,8 @@ function Onepoint() {
   const [latex, setLatex] = useState("");
   const [x, setX] = useState(0);
   const [datainput, setDatainput] = useState([]);
-  let valuex = 1;
-  let valueinput = "(1+cos(x))/3";
+  let valuex;
+  let valueinput ;
   const columns = [
     {
       field: "id",
@@ -86,8 +87,12 @@ function Onepoint() {
     setX(0);
     setDatainput([]);
   }
-  const handleChange2 = (event) => {
+  const handleChange2 = async(event) => {
     try {
+      await API.get("example/onepoint").then((res) => {
+        valuex = x;
+        valueinput = res.data.latex;
+      });
       event.preventDefault();
       reset();
       setLatex(valueinput);

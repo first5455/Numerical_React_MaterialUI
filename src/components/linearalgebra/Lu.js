@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "../Table";
+import API from "../api"
 const luqr = require("luqr").luqr;
 const useStyles = makeStyles({
   root: {
@@ -38,12 +39,8 @@ function Lu() {
   const [rows, setRows] = useState();
   let datainput,
     modeb = 0;
-  let value = [
-    [-2, 3, 1],
-    [3, 4, -5],
-    [1, -2, 1],
-  ];
-  let valueb = [9, 0, -4];
+  let value ;
+  let valueb ;
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
@@ -92,19 +89,23 @@ function Lu() {
     } catch (error) {}
   };
 
-  const changeMatrix = (event, data) => {
+  const changeMatrix = async(event, data) => {
+    await API.get("example/lu").then((res) => {
+      value = res.data.arrayA;
+      valueb = res.data.arrayB;
+    });
     let row = [];
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < value.length; i++) {
       let temp = [];
-      for (let j = 0; j < data[0].length; j++) {
+      for (let j = 0; j < value[0].length; j++) {
         temp[j] = (
           <input
             id={"r:" + i + "c:" + j}
-            defaultValue={parseFloat(data[i][j])}
+            defaultValue={parseFloat(value[i][j])}
           />
         );
       }
-      temp[data.length] = <br />;
+      temp[value.length] = <br />;
       row[i] = temp;
     }
     let field = [];
@@ -124,7 +125,7 @@ function Lu() {
       );
     }
     setInputs(field);
-    setDimension(data.length);
+    setDimension(value.length);
     setRows(row);
   };
   const pushb = () => {

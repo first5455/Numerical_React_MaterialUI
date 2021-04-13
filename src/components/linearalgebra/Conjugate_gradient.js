@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "../Table";
+import API from "../api"
 const math = require("mathjs");
 const useStyles = makeStyles({
   root: {
@@ -38,13 +39,8 @@ function Conjugate_gradient() {
   const [rows, setRows] = useState();
   let datainput,
     modeb = 0;
-  let value = [
-    [5, 2, 0, 0],
-    [2, 5, 2, 0],
-    [0, 2, 5, 2],
-    [0, 0, 2, 5],
-  ];
-  let valueb = [12, 17, 14, 7];
+  let value ;
+  let valueb ;
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
@@ -143,20 +139,24 @@ function Conjugate_gradient() {
     } catch (error) {}
   };
 
-  const changeMatrix = (event, data) => {
+  const changeMatrix = async(event, data) => {
+    await API.get("example/conjugate").then((res) => {
+      value = res.data.arrayA;
+      valueb = res.data.arrayB;
+    });
     let row = [];
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < value.length; i++) {
       let temp = [];
-      for (let j = 0; j < data[0].length; j++) {
+      for (let j = 0; j < value[0].length; j++) {
         temp[j] = (
           <input
             id={"r:" + i + "c:" + j}
-            defaultValue={parseFloat(data[i][j])}
+            defaultValue={parseFloat(value[i][j])}
           />
         );
       }
 
-      temp[data.length] = <br />;
+      temp[value.length] = <br />;
       row[i] = temp;
     }
     let field = [];
@@ -176,7 +176,7 @@ function Conjugate_gradient() {
       );
     }
     setInputs(field);
-    setDimension(data.length);
+    setDimension(value.length);
     setRows(row);
   };
   const pushb = () => {

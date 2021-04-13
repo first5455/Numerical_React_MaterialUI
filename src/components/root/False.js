@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState} from "react";
 import Graph from "../Graph";
 import { convert } from "../convert";
 import Table from "../Table";
@@ -6,6 +6,7 @@ import { addStyles, EditableMathField } from "react-mathquill";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { number } from "mathjs";
+import API from "../api";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -23,9 +24,9 @@ function False() {
   const [xl, setXl] = useState(0);
   const [xr, setXr] = useState(0);
   const [datainput, setDatainput] = useState([]);
-  let valuexl = 0;
-  let valuexr = 1;
-  let valueinput = "cos(x) - x * exp(x)";
+  let valuexl;
+  let valuexr;
+  let valueinput;
   const columns = [
     {
       field: "id",
@@ -110,20 +111,25 @@ function False() {
 
       return data;
     } catch (error) {
-      return []
+      return [];
     }
   };
-  const reset = ()=>{
+  const reset = () => {
     setLatex("");
     setXl(0);
     setXr(0);
     setDatainput([]);
-  }
-  const handleChange2 = (event) => {
+  };
+  const handleChange2 = async(event) => {
     try {
+      await API.get("example/false").then((res) => {
+        valuexl = res.data.xl;
+        valuexr = res.data.xr;
+        valueinput = res.data.latex;
+      });
       event.preventDefault();
       reset();
-      setLatex(valueinput)
+      setLatex(valueinput);
       setXl(valuexl);
       setXr(valuexr);
     } catch (error) {}
@@ -173,7 +179,11 @@ function False() {
               <Button type="submit" variant="contained" color="primary">
                 Submit
               </Button>
-              <Button onClick={handleChange2} variant="contained" color="primary">
+              <Button
+                onClick={handleChange2}
+                variant="contained"
+                color="primary"
+              >
                 Example
               </Button>
               <Button onClick={reset} variant="contained" color="primary">

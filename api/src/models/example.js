@@ -6,12 +6,12 @@ const exampleSchema = new mongoose.Schema({
   xr: Number,
   latex: String,
   x: Number,
-  arrayA: [Number],
-  arrayB: [Number],
-  arrayX: [Number],
-  arrayY: [Number],
+  arrayA: {},
+  arrayB: {},
+  arrayX: {},
+  arrayY: {},
   xfind: Number,
-  arrayInput: [Number],
+  arrayInput: {},
 })
 
 module.exports = mongoose.model('Example', exampleSchema)

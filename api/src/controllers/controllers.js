@@ -5,14 +5,14 @@ const boom = require('@hapi/boom')
 const Example = require('../models/example')
 
 // Get all cars
-exports.getExample = async (req, reply) => {
+/* exports.getExample = async (req, reply) => {
   try {
     const example = await Example.find()
     return example
   } catch (err) {
     throw boom.boomify(err)
   }
-}
+} */
 
 // Get single car by ID
 exports.getSingleExample = async (req, reply) => {

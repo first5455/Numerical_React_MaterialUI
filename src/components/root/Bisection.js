@@ -6,6 +6,7 @@ import { addStyles, EditableMathField } from "react-mathquill";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { number } from "mathjs";
+import API from "../api";
 addStyles();
 const useStyles = makeStyles({
   root: {
@@ -18,14 +19,15 @@ const useStyles = makeStyles({
     color: "black",
   },
 });
+
 function Bisection() {
   const [latex, setLatex] = useState("");
   const [xl, setXl] = useState(0);
   const [xr, setXr] = useState(0);
   const [datainput, setDatainput] = useState([]);
-  let valuexl = 0;
-  let valuexr = 1;
-  let valueinput = "cos(x) - x * exp(x)";
+  let valuexl ;
+  let valuexr ;
+  let valueinput ;
   const columns = [
     {
       field: "id",
@@ -74,7 +76,6 @@ function Bisection() {
     },
   ];
   const bisection = (xnl, xnr) => {
-    console.log(xnl,xnr)
     try {
       let error = 1,
         old = 1000,
@@ -113,17 +114,22 @@ function Bisection() {
       return [];
     }
   };
-  const reset = ()=>{
+  const reset = () => {
     setLatex("");
     setXl(0);
     setXr(0);
     setDatainput([]);
-  }
-  const handleChange2 = (event) => {
+  };
+  const handleChange2 = async(event) => {
     try {
+      await API.get("example/bisection").then((res) => {
+        valuexl = res.data.xl;
+        valuexr = res.data.xr;
+        valueinput = res.data.latex;
+      });
       event.preventDefault();
       reset();
-      setLatex(valueinput)
+      setLatex(valueinput);
       setXl(valuexl);
       setXr(valuexr);
     } catch (error) {}
@@ -173,7 +179,11 @@ function Bisection() {
               <Button type="submit" variant="contained" color="primary">
                 Submit
               </Button>
-              <Button onClick={handleChange2} variant="contained" color="primary">
+              <Button
+                onClick={handleChange2}
+                variant="contained"
+                color="primary"
+              >
                 Example
               </Button>
               <Button onClick={reset} variant="contained" color="primary">

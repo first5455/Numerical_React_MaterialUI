@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState} from "react";
 import Graph from "../Graph";
 import { convert } from "../convert";
 import Table from "../Table";
@@ -6,6 +6,7 @@ import { addStyles, EditableMathField } from "react-mathquill";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { number, derivative } from "mathjs";
+import API from "../api";
 const AlgebraLatex = require("algebra-latex");
 const useStyles = makeStyles({
   root: {
@@ -71,8 +72,8 @@ function Newton_raphson() {
   const [latex, setLatex] = useState("");
   const [x, setX] = useState(0);
   const [datainput, setDatainput] = useState([]);
-  let valuex = 2;
-  let valueinput = "3*x - cos(x) -1";
+  let valuex;
+  let valueinput;
   const Newton = (n) => {
     try {
       let error = 1,
@@ -101,16 +102,20 @@ function Newton_raphson() {
       }
       return data;
     } catch (error) {
-      return []
+      return [];
     }
   };
-  const reset = ()=>{
+  const reset = () => {
     setLatex("");
     setX(0);
     setDatainput([]);
-  }
-  const handleChange2 = (event) => {
+  };
+  const handleChange2 = async (event) => {
     try {
+      await API.get("example/newton_raphson").then((res) => {
+        valuex = res.data.x;
+        valueinput = res.data.latex;
+      });
       event.preventDefault();
       reset();
       setLatex(valueinput);
@@ -149,7 +154,11 @@ function Newton_raphson() {
               <Button type="submit" variant="contained" color="primary">
                 Submit
               </Button>
-              <Button onClick={handleChange2} variant="contained" color="primary">
+              <Button
+                onClick={handleChange2}
+                variant="contained"
+                color="primary"
+              >
                 Example
               </Button>
               <Button onClick={reset} variant="contained" color="primary">

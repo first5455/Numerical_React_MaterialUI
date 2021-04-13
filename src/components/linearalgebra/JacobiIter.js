@@ -2,6 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "../Table";
+import API from "../api"
 const math = require("mathjs");
 const useStyles = makeStyles({
   root: {
@@ -41,13 +42,9 @@ function Jacobi_iter() {
   const [inputs, setInputs] = useState();
   const [inputsx, setInputsx] = useState();
   const [ans, setAns] = useState([]);
-  let value = [
-    [4, -4, 0],
-    [-1, 4, -2],
-    [0, -2, 4],
-  ];
-  let valueb = [400, 400, 400];
-  let valuex = [0, 0, 0];
+  let value ;
+  let valueb ;
+  let valuex ;
   let bin = [];
   let xin = [];
   const jacobiIter = () => {
@@ -134,20 +131,25 @@ function Jacobi_iter() {
     } catch (error) {}
   };
 
-  const changeMatrix = (event, data) => {
+  const changeMatrix = async(event, data) => {
+    await API.get("example/jacobi").then((res) => {
+      value = res.data.arrayA;
+      valueb = res.data.arrayB;
+      valuex = res.data.arrayX;
+    });
     modeb = 1;
     let row = [];
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < value.length; i++) {
       let temp = [];
-      for (let j = 0; j < data[0].length; j++) {
+      for (let j = 0; j < value[0].length; j++) {
         temp[j] = (
           <input
             id={"r:" + i + "c:" + j}
-            defaultValue={parseFloat(data[i][j])}
+            defaultValue={parseFloat(value[i][j])}
           />
         );
       }
-      temp[data.length] = <br />;
+      temp[value.length] = <br />;
       row[i] = temp;
     }
     let field = [];
@@ -181,7 +183,7 @@ function Jacobi_iter() {
     }
     setInputs(field);
     setInputsx(fieldx);
-    setDimension(data.length);
+    setDimension(value.length);
     setRows(row);
   };
   const pushb = () => {

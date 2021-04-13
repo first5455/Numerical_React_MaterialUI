@@ -7,7 +7,7 @@ import Root from "./pages/Root";
 import Solution from "./pages/LinearAlgebra";
 import Inter from "./pages/Inter";
 import Regress from "./pages/Regression";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
 function App() {
@@ -40,9 +40,6 @@ function App() {
             <Grid item xs={12}>
               <Switch>
                 <Route exact path="/">
-                  <Redirect to="/home" />
-                </Route>
-                <Route path="/home">
                   <Home />
                 </Route>
                 <Route path="/root">

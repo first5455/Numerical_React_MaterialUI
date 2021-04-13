@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "algebra-latex": "^2.0.3",
+    "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "cubic-spline": "^3.0.3",
     "desmos": "^1.5.4",

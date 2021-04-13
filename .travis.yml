@@ -1,12 +1,6 @@
-sudo: required
-language: node_js
-node_js:
-  - "stable"
-
-services:
-  - docker
-
-before_install:
-  - docker build -t wilpat/sample-app -f Dockerfile.dev .
+addons:
+  apt:
+    packages:
+      - docker-ce
 script:
-  - docker run -e CI=true wilpat/sample-app npm run test -- --coverage
+  - docker-compose up

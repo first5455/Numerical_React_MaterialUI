@@ -19,22 +19,21 @@ const routes = [
     url: "/api/example/:name",
     handler: Controller.getSingleExample,
   },
-  /*       {
-        method: 'POST',
-        url: '/api/example',
-        handler: Controller.addExample,
-        //schema: documentation.addExampleSchema
-      },
-      {
-        method: 'PUT',
-        url: '/api/example/:id',
-        handler: Controller.updateExample
-      },
-      {
-        method: 'DELETE',
-        url: '/api/example/:id',
-        handler: Controller.deleteExample
-      } */
+  /*   {
+    method: "POST",
+    url: "/api/example",
+    handler: Controller.addExample,
+  },
+  {
+    method: "PUT",
+    url: "/api/example/:name",
+    handler: Controller.updateExample,
+  },
+  {
+    method: "DELETE",
+    url: "/api/example/:name",
+    handler: Controller.deleteExample,
+  }, */
 ];
 
 module.exports = routes;

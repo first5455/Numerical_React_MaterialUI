@@ -7,6 +7,8 @@
 
 <div align="center">
 
+[![Docker Image CI](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/docker-image.yml/badge.svg)](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/docker-image.yml)
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
@@ -46,7 +48,6 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 npm install
 ```
-
 
 ## 🔧 Running the tests <a name = "tests"></a>
 
@@ -88,6 +89,5 @@ docker-compose up
 ## ✍️ Authors <a name = "authors"></a>
 
 - [@first5455](https://github.com/first5455)
-
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>

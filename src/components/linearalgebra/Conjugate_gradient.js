@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "../Table";
-import API from "../api"
+import API from "../api";
 const math = require("mathjs");
 const useStyles = makeStyles({
   root: {
@@ -39,8 +39,8 @@ function Conjugate_gradient() {
   const [rows, setRows] = useState();
   let datainput,
     modeb = 0;
-  let value ;
-  let valueb ;
+  let value;
+  let valueb;
   const [inputs, setInputs] = useState();
   const [ans, setAns] = useState([]);
   let bin = [];
@@ -75,9 +75,11 @@ function Conjugate_gradient() {
         ramda =
           (-1 * math.multiply(math.transpose(D), R)) /
           math.multiply(math.transpose(D), A, D); //ramda
-        X = X.map(
-          (value, index) => value + ramda * math.subset(D, math.index(index))
-        ); //Xk+1
+        for (let index = 0; index < X._size; index++) {
+          X._data[index] =
+            X._data[index] + ramda * math.subset(D, math.index(index));
+        } //Xk+1
+
         R = B.map((value, index) => {
           //Rk+1
           return (
@@ -97,11 +99,11 @@ function Conjugate_gradient() {
         alpha =
           math.multiply(math.transpose(R), A, D) /
           math.multiply(math.transpose(D), A, D); //alpha
-        D = R.map(
-          (value, index) =>
-            -1 * value + alpha * math.subset(D, math.index(index))
-        ); //Dk+1
+        for (let index = 0; index < R.length; index++) {
+          D[index] = -1 * R[index] + alpha * math.subset(D, math.index(index));
+        } //Dk+1
       }
+
       for (let i = 0; i < X._data.length; i++) {
         ans[i] = {
           id: i,
@@ -139,7 +141,7 @@ function Conjugate_gradient() {
     } catch (error) {}
   };
 
-  const changeMatrix = async(event, data) => {
+  const changeMatrix = async (event, data) => {
     await API.get("example/conjugate").then((res) => {
       value = res.data.arrayA;
       valueb = res.data.arrayB;

@@ -44,7 +44,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Docker
 
-### Installing for Dev
+### Installing dependencies
 
 ```
 npm install
@@ -52,22 +52,9 @@ npm install
 
 ## 🔧 Running the tests <a name = "tests"></a>
 
-Explain how to run the automated tests for this system.
-
-### Break down into end to end tests
-
-Explain what these tests test and why
 
 ```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
+npm test
 ```
 
 ## 🎈 Usage <a name="usage"></a>

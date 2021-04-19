@@ -1,14 +1,11 @@
 // Require external modules
 const mongoose = require("mongoose");
 
-/* mongoose
-  .connect("mongodb://mongos:27017/mydatabase")
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err)); */
+const host = process.env.MONGOHOST || "localhost"
 
-//for Develop only
+//connect mongo
 mongoose
-  .connect("mongodb://localhost:27017/mydatabase")
+  .connect(`mongodb://${host}:27017/mydatabase`)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 

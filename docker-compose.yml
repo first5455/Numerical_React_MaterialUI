@@ -8,18 +8,12 @@ services:
       - 80:80
   mongos:
     container_name: mongos
-    hostname: mongos
-    image: mongo
-    environment:
-      MONGO_INITDB_DATABASE: mydatabase
-
+    build: ./mongoDB
     ports:
       - 27017:27017
-    volumes:
-      - ./mongoDB/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
   api:
     container_name: api
-    hostname: api
     build: ./api
     restart: always
     ports:
@@ -30,3 +24,4 @@ services:
       - mongos
     environment:
       WAIT_HOSTS: mongos:27017
+      MONGOHOST: mongos

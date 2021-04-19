@@ -18,6 +18,7 @@
 **/Dockerfile*
 **/node_modules
 **/api
+**/mongoDB
 **/npm-debug.log
 **/obj
 **/secrets.dev.yaml

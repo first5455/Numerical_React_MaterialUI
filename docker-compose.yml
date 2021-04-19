@@ -4,8 +4,6 @@ services:
   app:
     container_name: react-web
     build: .
-    volumes:
-      - .:/app
     ports:
       - 80:80
   mongos:

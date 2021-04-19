@@ -3,9 +3,7 @@ version: "3.7"
 services:
   app:
     container_name: react-web
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     volumes:
       - .:/app
     ports:

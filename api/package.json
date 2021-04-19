@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.2",
     "fastify": "^3.14.2",
+    "fastify-cors": "^5.2.0",
     "fastify-swagger": "^4.5.1",
     "mongoose": "^5.12.3",
     "nodemon": "^2.0.7"

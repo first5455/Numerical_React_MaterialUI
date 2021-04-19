@@ -10,6 +10,10 @@ fastify.get("/", async (request, reply) => {
 
 const swagger = require("./src/config/swagger");
 
+fastify.register (require("fastify-cors"),{
+  origin: true
+})
+
 fastify.register(require("fastify-swagger"), swagger.options);
 
 // Run the server!

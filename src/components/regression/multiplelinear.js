@@ -66,8 +66,8 @@ function MultipleLinear() {
   };
   const controlInput2 = async(event) => {
     await API.get("example/multiplelinear").then((res) => {
-      value = res.data.arrayInput;
-      console.log(res.data.arrayInput)
+      value = res.data.arrayX;
+      console.log(res.data.arrayX)
     });
     event.preventDefault();
     let fieldx = [];

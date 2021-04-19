@@ -11,7 +11,6 @@ const exampleSchema = new mongoose.Schema({
   arrayX: {},
   arrayY: {},
   xfind: Number,
-  arrayInput: {},
 })
 
 module.exports = mongoose.model('Example', exampleSchema)

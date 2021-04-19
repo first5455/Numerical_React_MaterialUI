@@ -38,10 +38,10 @@ exports.addExample = async (req, reply) => {
 // Update an existing
 exports.updateExample = async (req, reply) => {
   try {
-    const id = req.params.id
+    const name = req.params.name
     const example = req.body
     const { ...updateData } = example
-    const update = await Example.findByIdAndUpdate(id, updateData, { new: true })
+    const update = await Example.findOneAndUpdate({name:name}, updateData, { new: true })
     return update
   } catch (err) {
     throw boom.boomify(err)
@@ -51,8 +51,8 @@ exports.updateExample = async (req, reply) => {
 // Delete
 exports.deleteExample = async (req, reply) => {
   try {
-    const id = req.params.id
-    const example = await Example.findByIdAndRemove(id)
+    const name = req.params.name
+    const example = await Example.findOneAndRemove({name:name})
     return example
   } catch (err) {
     throw boom.boomify(err)

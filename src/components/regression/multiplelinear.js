@@ -199,7 +199,7 @@ function MultipleLinear() {
             Answer is {ans}
           </Typography>
           <Typography variant="h6" align="center">
-            **รูปแบบลำดับคือ [a0,a1X1,a2X2,...anXn]**
+            **รูปแบบลำดับคือ [a0,a1,a2,...an]**
           </Typography>
         </Grid>
       </Grid>

@@ -174,6 +174,7 @@ function Linear() {
         <Grid item xs={12}>
           <Typography variant="h4" align="center">
             Answer is {ans}
+            **รูปแบบลำดับคือ [a0,a1,a2,...an]**
           </Typography>
         </Grid>
       </Grid>

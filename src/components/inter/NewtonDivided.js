@@ -1,7 +1,8 @@
 import { React, useState } from "react";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import API from "../api"
+import Table from "../Table";
+import API from "../api";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -13,6 +14,24 @@ const useStyles = makeStyles({
     color: "black",
   },
 });
+const columns = [
+  {
+    field: "id",
+    headerName: "Iteration",
+    description: "จำนวนรอบการวน",
+    width: 150,
+    sortable: false,
+    headerAlign: "center",
+  },
+  {
+    field: "c",
+    headerName: "C",
+    description: "ค่า C",
+    width: 250,
+    sortable: false,
+    headerAlign: "center",
+  },
+];
 function Newton_divided() {
   const classes = useStyles();
   const [sizeInputs, setSizeInputs] = useState(0);
@@ -20,17 +39,20 @@ function Newton_divided() {
   const [inputsY, setInputsY] = useState([]);
   const [xstart, setXstart] = useState(0);
   const [ans, setAns] = useState("-");
+  const [datainput, setDatainput] = useState([]);
   let Xin = [];
   let Yin = [];
-  let Xdata ;
-  let Ydata ;
-  let XfindData ;
+  let Xdata;
+  let Ydata;
+  let XfindData;
   const newtonDivied = () => {
     try {
       pushInput();
+      let data = [];
       let x = Xin;
       let y = Yin;
       let xfind = xstart;
+      let dataC = [];
       let C = (st, ed) => {
         if (ed - st === 1) {
           let output = (y[ed] - y[st]) / (x[ed] - x[st]);
@@ -46,15 +68,37 @@ function Newton_divided() {
         let sum = y[0];
         for (let i = 1; i < x.length; i++) {
           let temp2 = C(0, i);
+          dataC.push(temp2);
           for (let j = 0; j < i; j++) {
             let temp = xfind - x[j];
             temp2 *= temp;
           }
           sum += temp2;
         }
+        for (let i = 0; i < dataC.length; i++) {
+          data[i] = {
+            id: i,
+            c: parseFloat(dataC[i]),
+          };
+        }
+        setDatainput(data);
         return sum;
       };
-      return find(xfind);
+      let ans = find(xfind);
+      //console.log(data)
+      //let oC = parseFloat(dataC[0]).toFixed(3) + "(C" + 0 + ")";
+      /*       for (let i = 1; i < x.length - 1; i++) {
+        let temp = "";
+        for (let j = 0; j < i; j++) {
+          temp += "(" + xfind + "-" + x[j] + ")";
+        }
+        oC += "+" + parseFloat(dataC[i]).toFixed(3) + "(C" + i + ")" + temp;
+      } */
+
+      //console.log(oC);
+
+      //setOutC(odiv);
+      return ans;
     } catch (error) {
       return "Error";
     }
@@ -67,11 +111,11 @@ function Newton_divided() {
       }
     } catch (error) {}
   };
-  const controlInput2 = async(event) => {
+  const controlInput2 = async (event) => {
     await API.get("example/newton_divided").then((res) => {
       Xdata = res.data.arrayX;
       Ydata = res.data.arrayY;
-      XfindData = res.data.xfind
+      XfindData = res.data.xfind;
     });
     event.preventDefault();
     let fieldx = [];
@@ -198,10 +242,13 @@ function Newton_divided() {
             Reset
           </Button>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} align="center">
           <Typography variant="h4" align="center">
-            Answer f(x) in x = {xstart} is {ans}
+            Answer f(x) is {ans}
           </Typography>
+          <Grid item xs={4} align="center">
+            <Table rows={datainput} columns={columns} />
+          </Grid>
         </Grid>
       </Grid>
     </div>

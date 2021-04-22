@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 const columns = [
   {
     field: "id",
-    headerName: "Iteration",
+    headerName: "Index",
     description: "จำนวนรอบการวน",
     width: 150,
     sortable: false,
@@ -246,7 +246,7 @@ function Newton_divided() {
           <Typography variant="h4" align="center">
             Answer f(x) is {ans}
           </Typography>
-          <Grid item xs={4} align="center">
+          <Grid item xs={5} align="center">
             <Table rows={datainput} columns={columns} />
           </Grid>
         </Grid>

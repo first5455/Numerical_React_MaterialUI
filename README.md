@@ -4,9 +4,12 @@
 <div align="center">
  
  [![Node.js CI](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/node.js.yml/badge.svg)](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/node.js.yml)
-[![Build Status](https://travis-ci.com/first5455/Numerical_React_MaterialUI.svg?token=yybzxWBrxvxvBURNnpAL&branch=main)](https://travis-ci.com/first5455/Numerical_React_MaterialUI)
 [![Docker Image CI](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/docker-image.yml/badge.svg)](https://github.com/first5455/Numerical_React_MaterialUI/actions/workflows/docker-image.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+<a href="http://www.wtfpl.net/"><img
+       src="http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png"
+       width="80" height="15" alt="WTFPL" /></a>
 
 </div>
 

@@ -22,7 +22,8 @@ const useStyles = makeStyles({
 addStyles();
 const Diff = (FX, X) => {
   const latexInput = FX;
-  const latexrepacle = latexInput.replace("\\exp", " exp");
+  let latexrepacle = latexInput.replace("\\exp", " exp");
+  latexrepacle = latexrepacle.replaceAll("ln","log");
   const algebraObj = new AlgebraLatex().parseLatex(latexrepacle);
   let text = algebraObj.toMath();
   let expr = derivative(text, "x");

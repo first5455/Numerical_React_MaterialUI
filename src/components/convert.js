@@ -3,7 +3,8 @@ const AlgebraLatex = require("algebra-latex");
 const convert = (fn, inputx) => {
     /* convert latex to math */
   const latexInput = fn;
-  const latexrepacle = latexInput.replace('\\exp',' exp')
+  let latexrepacle = latexInput.replace('\\exp',' exp')
+  latexrepacle = latexrepacle.replaceAll("ln","log")
   const algebraObj = new AlgebraLatex().parseLatex(latexrepacle);
   let text = algebraObj.toMath();
   /* format exp string for mathjs */

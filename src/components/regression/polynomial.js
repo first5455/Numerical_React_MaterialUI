@@ -19,7 +19,9 @@ function Polynomial() {
   const [sizepoint, setSizepoint] = useState(0);
   const [inputsX, setInputX] = useState();
   const [inputsY, setInputY] = useState();
+  const [xfind,setXfind] = useState();
   const [ans, setAns] = useState();
+  const [outfind,setOutfind] = useState();
   const [order, setOrder] = useState(0);
   let Xin = [];
   let Yin = [];
@@ -28,16 +30,21 @@ function Polynomial() {
   const polynomial_regress = () => {
     try {
       pushInput();
-      let output = regression.polynomial(point, { order: order }).equation;
-      let ans = "[";
-      for (let i = 0; i < output.length; i++) {
-        if (i === output.length - 1) {
-          ans += output[i] + "";
-        } else {
-          ans += output[i] + ",";
-        }
-      }
-      ans += "]";
+      let output = regression.polynomial(point, { order: parseInt(order) });
+      let ans = output.string;
+      //console.log(output)
+      let sum = 0; 
+      let poww = order;
+        for(let i = 0;i<=order;i++){
+            if(i===order){
+              sum += output.equation[i]
+              }else{
+                sum += output.equation[i]*(Math.pow(xfind,poww))
+              }
+              poww--;
+            }
+      //console.log(sum)
+      setOutfind(sum)
       return ans;
     } catch (error) {
       return "Error";
@@ -156,6 +163,14 @@ function Polynomial() {
             label="Input Order"
             style={{ backgroundColor: "whitesmoke" }}
           />
+          <TextField
+            InputProps={{ className: classes.input }}
+            variant="outlined"
+            value={xfind}
+            onInput={(e) => setXfind(e.target.value)}
+            label="X Find"
+            style={{ backgroundColor: "whitesmoke" }}
+          />
         </Grid>
         <Grid item xs={12} align="center">
           <Button variant="contained" onClick={controlInput} color="primary">
@@ -183,10 +198,10 @@ function Polynomial() {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h4" align="center">
-            Answer is {ans}
+            {ans}
           </Typography>
           <Typography variant="h6" align="center">
-            **รูปแบบลำดับคือ [an...,a1,a0]**
+            {outfind}
           </Typography>
         </Grid>
       </Grid>
